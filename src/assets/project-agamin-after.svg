@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 625">
+  <rect width="1000" height="625" fill="#e7eef0"/>
+  <rect y="330" width="1000" height="295" fill="#d2c6b5"/>
+  <path d="M0 360h1000M0 440h1000M0 520h1000" stroke="#b8ad98" stroke-width="3"/>
+  <path d="M80 390V145h840v245" fill="none" stroke="#faf8ef" stroke-width="22"/>
+  <path d="M125 380V190h750v190" fill="none" stroke="#667f80" stroke-width="11"/>
+  <path d="M125 302h750" stroke="#667f80" stroke-width="12"/>
+  <path d="M210 302v-100M320 302v-100M430 302v-100M540 302v-100M650 302v-100M760 302v-100" stroke="#667f80" stroke-width="7"/>
+  <rect x="115" y="415" width="180" height="112" rx="8" fill="#8b735a"/>
+  <rect x="330" y="440" width="130" height="86" rx="8" fill="#b06445"/>
+  <rect x="500" y="420" width="170" height="108" rx="8" fill="#677b61"/>
+  <rect x="715" y="408" width="145" height="118" rx="8" fill="#c4ad8d"/>
+  <path d="M180 415c-45-95 8-170 68-230 42 102 16 180-68 230Z" fill="#244f3f"/>
+  <path d="M260 415c12-82 75-128 140-160-4 86-50 138-140 160Z" fill="#4e8565"/>
+  <path d="M360 440c-30-64 10-120 54-160 26 68 8 122-54 160Z" fill="#2d6b52"/>
+  <path d="M542 420c-44-90 5-150 68-204 32 92 8 158-68 204Z" fill="#1f4f3d"/>
+  <path d="M625 420c10-76 68-122 128-154 0 76-42 130-128 154Z" fill="#6f9c78"/>
+  <path d="M760 408c-42-92 6-158 62-214 37 96 10 164-62 214Z" fill="#355e4c"/>
+  <path d="M110 170c96-36 165-32 260 2 75 27 148 22 234-9" fill="none" stroke="#fff" stroke-width="16" opacity=".5"/>
+</svg>

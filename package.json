@@ -1,0 +1,19 @@
+{
+  "name": "atelier-vert",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "serve": "npm run build && node scripts/server.mjs",
+    "serve:static": "npm run build && vite --host 127.0.0.1 dist",
+    "check": "npm run build && node scripts/check.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.1",
+    "vite": "^7.0.0"
+  },
+  "dependencies": {
+    "busboy": "^1.6.0"
+  }
+}

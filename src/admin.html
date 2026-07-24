@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>ATELIER VERT Admin</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --green: #123126;
+      --line: rgba(18, 49, 38, 0.18);
+      --paper: #fbfaf5;
+      --muted: #5c665f;
+      font-family: Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--green); line-height: 1.5; }
+    main { width: min(1080px, calc(100% - 32px)); margin: 0 auto; padding: 36px 0 60px; }
+    header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+    img { width: 42px; height: 42px; }
+    section { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 20px; margin-top: 18px; }
+    label { display: grid; gap: 8px; font-weight: 700; margin-top: 12px; }
+    input, textarea { width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: 11px; font: inherit; }
+    textarea { min-height: 480px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; }
+    button, a.button { display: inline-flex; min-height: 42px; align-items: center; justify-content: center; border: 1px solid var(--green); background: var(--green); color: #fff; border-radius: 6px; padding: 9px 14px; font-weight: 700; text-decoration: none; cursor: pointer; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .muted { color: var(--muted); }
+    pre { white-space: pre-wrap; border: 1px solid var(--line); border-radius: 6px; padding: 12px; background: #f5f3ec; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <img src="/assets/logo.svg" alt="">
+      <div>
+        <h1>ATELIER VERT Admin</h1>
+        <p class="muted">Token-gated lead export and file-based CMS controls for the local MVP server.</p>
+      </div>
+    </header>
+
+    <section>
+      <h2>Access</h2>
+      <label>Admin or editor token
+        <input id="token" type="password" autocomplete="off" placeholder="Set ATELIER_ADMIN_TOKEN or ATELIER_EDITOR_TOKEN on the server">
+      </label>
+      <div class="actions">
+        <button id="loadContent" type="button">Load editable content</button>
+        <a class="button" id="downloadCsv" href="#">Download leads CSV</a>
+      </div>
+      <p class="muted">Admin token can export leads and edit content. Editor token can edit content only.</p>
+    </section>
+
+    <section>
+      <h2>Content CMS</h2>
+      <p class="muted">Edit brand contacts, service areas, packages, FAQ, and projects. Save rebuilds the generated site from <code>data/cms-overrides.json</code>.</p>
+      <textarea id="content" spellcheck="false"></textarea>
+      <div class="actions">
+        <button id="saveContent" type="button">Save and rebuild</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Status</h2>
+      <pre id="status">Waiting for token.</pre>
+    </section>
+  </main>
+  <script>
+    const tokenInput = document.querySelector("#token");
+    const content = document.querySelector("#content");
+    const statusBox = document.querySelector("#status");
+    const savedToken = sessionStorage.getItem("atelier_admin_token");
+    if (savedToken) tokenInput.value = savedToken;
+
+    function token() {
+      sessionStorage.setItem("atelier_admin_token", tokenInput.value);
+      return tokenInput.value;
+    }
+
+    function setStatus(value) {
+      statusBox.textContent = typeof value === "string" ? value : JSON.stringify(value, null, 2);
+    }
+
+    document.querySelector("#downloadCsv").addEventListener("click", (event) => {
+      event.currentTarget.href = `/api/admin/leads.csv?token=${encodeURIComponent(token())}`;
+    });
+
+    document.querySelector("#loadContent").addEventListener("click", async () => {
+      const response = await fetch(`/api/admin/content?token=${encodeURIComponent(token())}`);
+      const payload = await response.json();
+      if (!response.ok) return setStatus(payload);
+      content.value = JSON.stringify(payload.content, null, 2);
+      setStatus({ ok: true, message: "Loaded editable content." });
+    });
+
+    document.querySelector("#saveContent").addEventListener("click", async () => {
+      let parsed;
+      try {
+        parsed = JSON.parse(content.value);
+      } catch (err) {
+        return setStatus({ ok: false, error: "Invalid JSON", detail: err.message });
+      }
+      const response = await fetch(`/api/admin/content?token=${encodeURIComponent(token())}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(parsed)
+      });
+      const payload = await response.json();
+      setStatus(payload);
+    });
+  </script>
+</body>
+</html>

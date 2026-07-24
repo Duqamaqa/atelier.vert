@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="1">
+      <stop offset="0" stop-color="#d9eef0"/>
+      <stop offset="1" stop-color="#f9e2c5"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#ded8ca"/>
+      <stop offset="1" stop-color="#bcb09c"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky)"/>
+  <rect x="0" y="480" width="1200" height="420" fill="url(#floor)"/>
+  <path d="M0 505h1200" stroke="#f8faf8" stroke-width="10"/>
+  <path d="M0 530h1200M0 615h1200M0 700h1200M0 785h1200" stroke="#c7bdac" stroke-width="3"/>
+  <path d="M120 560V290h960v270" fill="none" stroke="#e8e6df" stroke-width="22"/>
+  <path d="M165 560V325h870v235" fill="none" stroke="#8da5a8" stroke-width="12"/>
+  <path d="M160 458h880" stroke="#607b7f" stroke-width="16"/>
+  <path d="M190 455v-120M305 455v-120M420 455v-120M535 455v-120M650 455v-120M765 455v-120M880 455v-120M995 455v-120" stroke="#607b7f" stroke-width="9"/>
+  <rect x="105" y="625" width="210" height="98" rx="8" fill="#806a51"/>
+  <rect x="360" y="610" width="165" height="118" rx="8" fill="#b06445"/>
+  <rect x="560" y="635" width="145" height="92" rx="8" fill="#6f8068"/>
+  <rect x="740" y="598" width="260" height="130" rx="8" fill="#cabda7"/>
+  <path d="M166 626c-28-92 56-150 78-222 30 82-2 159-78 222Z" fill="#2d6b52"/>
+  <path d="M250 626c-2-86 58-126 108-176 5 83-34 141-108 176Z" fill="#3f7f63"/>
+  <path d="M390 610c-48-78-18-160 30-215 45 75 30 151-30 215Z" fill="#1f4f3d"/>
+  <path d="M472 610c18-83 88-124 150-145-8 88-62 133-150 145Z" fill="#6f9c78"/>
+  <path d="M590 634c-24-65 20-116 62-148 20 70-3 120-62 148Z" fill="#567a4b"/>
+  <path d="M815 598c-54-112-10-206 54-273 58 110 32 202-54 273Z" fill="#244f3f"/>
+  <path d="M913 598c4-104 82-158 154-194 0 102-56 166-154 194Z" fill="#4e8565"/>
+  <path d="M120 815h940" stroke="#928775" stroke-width="8" opacity=".45"/>
+  <circle cx="1010" cy="150" r="58" fill="#f2b765" opacity=".65"/>
+  <path d="M82 762c180-30 315-25 512-2 160 18 282 10 490-26" fill="none" stroke="#2d6b52" stroke-width="18" opacity=".28"/>
+</svg>

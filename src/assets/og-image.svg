@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#fbfaf5"/>
+  <rect x="56" y="56" width="1088" height="518" rx="18" fill="#123126"/>
+  <path d="M138 440c180-42 324-32 500-8 142 20 246 12 426-30" fill="none" stroke="#8fb49a" stroke-width="38" opacity=".8"/>
+  <path d="M240 440c-80-164 20-278 132-374 72 176 28 302-132 374Z" fill="#dfe8dc"/>
+  <path d="M398 440c16-138 126-216 238-268-8 150-92 238-238 268Z" fill="#6f9c78"/>
+  <text x="680" y="250" fill="#fbfaf5" font-family="Arial, sans-serif" font-size="58" font-weight="700">ATELIER VERT</text>
+  <text x="680" y="326" fill="#dfe8dc" font-family="Arial, sans-serif" font-size="34">Green balconies in Netanya</text>
+</svg>
