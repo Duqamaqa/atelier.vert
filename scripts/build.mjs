@@ -16,6 +16,8 @@ import {
 
 const root = process.cwd();
 const dist = path.join(root, "dist");
+const basePath = normalizeBasePath(process.env.ATELIER_BASE_PATH || "");
+const publicSiteUrl = normalizeSiteUrl(process.env.ATELIER_SITE_URL || brand.siteUrl);
 
 applyCmsOverrides();
 
@@ -48,6 +50,16 @@ function esc(value = "") {
 function writeFile(filePath, content) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, content);
+}
+
+function normalizeBasePath(value = "") {
+  const trimmed = String(value).trim();
+  if (!trimmed || trimmed === "/") return "";
+  return `/${trimmed.replace(/^\/+|\/+$/g, "")}`;
+}
+
+function normalizeSiteUrl(value = "") {
+  return String(value).trim().replace(/\/+$/g, "");
 }
 
 function copyDir(source, target) {
@@ -87,19 +99,29 @@ function applyCmsOverrides() {
   if (cms.testimonialsPolicy) Object.assign(testimonialsPolicy, deepMerge(testimonialsPolicy, cms.testimonialsPolicy));
 }
 
-function pageHref(lang, page = "home", slug = "") {
+function routePath(lang, page = "home", slug = "") {
   if (page === "home") return `/${lang}/`;
   if (page === "project") return `/${lang}/projects/${slug}/`;
   return `/${lang}/${routes[page]}/`;
 }
 
+function pageHref(lang, page = "home", slug = "") {
+  return `${basePath}${routePath(lang, page, slug)}`;
+}
+
 function canonical(lang, page, slug = "") {
-  return `${brand.siteUrl}${pageHref(lang, page, slug)}`;
+  return `${publicSiteUrl}${routePath(lang, page, slug)}`;
 }
 
 function localizedPath(currentLang, page, slug = "") {
   const other = currentLang === "he" ? "ru" : "he";
   return pageHref(other, page, slug);
+}
+
+function publicPath(value) {
+  if (!value) return "";
+  if (/^(?:[a-z][a-z0-9+.-]*:|#)/i.test(value)) return value;
+  return `${basePath}${value.startsWith("/") ? value : `/${value}`}`;
 }
 
 function whatsappHref(lang) {
@@ -159,7 +181,7 @@ function header(lang, page, slug = "") {
   return `
     <header class="site-header" data-header>
       <a class="brand-mark" href="${pageHref(lang)}" aria-label="${brand.latin}">
-        <img src="/assets/logo.svg" alt="" width="42" height="42">
+        <img src="${publicPath("/assets/logo.svg")}" alt="" width="42" height="42">
         <span><b>${brand.latin}</b><small>${lang === "he" ? brand.he : "האטלייה הירוק"}</small></span>
       </a>
       <button class="icon-button menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="main-nav" title="Menu">${icon("menu")}</button>
@@ -179,7 +201,7 @@ function footer(lang) {
       <div class="footer-grid">
         <div>
           <a class="brand-mark footer-brand" href="${pageHref(lang)}">
-            <img src="/assets/logo.svg" alt="" width="42" height="42">
+            <img src="${publicPath("/assets/logo.svg")}" alt="" width="42" height="42">
             <span><b>${brand.latin}</b><small>${lang === "he" ? brand.he : "Студия зелёных балконов"}</small></span>
           </a>
           <p>${lang === "he" ? "סטודיו מקומי לעיצוב והקמת מרפסות ירוקות בנתניה, עם פתרונות לשמש, רוח, השקיה ותחזוקה." : "Локальная студия дизайна и создания зелёных балконов в Нетании с решениями для солнца, ветра, полива и ухода."}</p>
@@ -231,9 +253,9 @@ function layout(lang, page, body, slug = "") {
   <meta property="og:title" content="${esc(title)}">
   <meta property="og:description" content="${esc(description)}">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="${brand.siteUrl}/assets/og-image.svg">
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/styles.css">
+  <meta property="og:image" content="${publicSiteUrl}/assets/og-image.svg">
+  <link rel="icon" href="${publicPath("/assets/favicon.svg")}" type="image/svg+xml">
+  <link rel="stylesheet" href="${publicPath("/styles.css")}">
   <script>
     window.ATELIER = ${JSON.stringify({
       lang,
@@ -241,6 +263,7 @@ function layout(lang, page, body, slug = "") {
       whatsappNumber: brand.whatsappNumber,
       whatsappText: t.whatsappText,
       phoneHref: brand.phoneHref,
+      basePath,
       estimatePath: pageHref(lang, "estimate"),
       thankYouPath: pageHref(lang, "thankYou"),
       labels: t.common
@@ -254,7 +277,7 @@ function layout(lang, page, body, slug = "") {
   ${header(lang, page, slug)}
   <main id="main">${body}</main>
   ${footer(lang)}
-  <script src="/app.js" defer></script>
+  <script src="${publicPath("/app.js")}" defer></script>
 </body>
 </html>`;
 }
@@ -317,8 +340,8 @@ function hero(lang) {
         <p class="price-note">${lang === "he" ? "חבילת Start מ-6 900 ₪ · התקנה טיפוסית 1–3 ימים אחרי מוכנות חומרים" : "Start от 6 900 ₪ · типовой монтаж 1–3 дня после готовности материалов"}</p>
       </div>
       <div class="hero-media before-after" data-before-after>
-        <img class="before-img" src="/assets/photos/hero-before.jpg" alt="${lang === "he" ? "מרפסת ריקה מול הים לפני תכנון ירוק" : "Пустой балкон с видом на море до зелёного проекта"}">
-        <img class="after-img" src="/assets/photos/hero-after-same-balcony.png" alt="${lang === "he" ? "אותה מרפסת מול הים לאחר הוספת כדים וצמחייה" : "Тот же балкон с видом на море после добавления кашпо и растений"}">
+        <img class="before-img" src="${publicPath("/assets/photos/hero-before.jpg")}" alt="${lang === "he" ? "מרפסת ריקה מול הים לפני תכנון ירוק" : "Пустой балкон с видом на море до зелёного проекта"}">
+        <img class="after-img" src="${publicPath("/assets/photos/hero-after-same-balcony.png")}" alt="${lang === "he" ? "אותה מרפסת מול הים לאחר הוספת כדים וצמחייה" : "Тот же балкон с видом на море после добавления кашпо и растений"}">
         <input type="range" min="0" max="100" value="50" aria-label="${lang === "he" ? "השוואת לפני ואחרי" : "Сравнение до и после"}">
         <span class="media-badge before">${lang === "he" ? "לפני" : "до"}</span>
         <span class="media-badge after">${lang === "he" ? "אחרי" : "после"}</span>
@@ -389,7 +412,7 @@ function projectCard(lang, project) {
   return `
     <article class="project-card" data-project-card data-size="${project.size}" data-exposure="${project.exposure}" data-package="${project.packageId}" data-district="${project.districtKey}" data-goal="${project.goal}">
       <a class="project-image" href="${pageHref(lang, "project", project.slug)}" aria-label="${esc(project.title[lang])}">
-        <img src="${project.afterImage}" alt="${esc(project.alt[lang])}">
+        <img src="${publicPath(project.afterImage)}" alt="${esc(project.alt[lang])}">
       </a>
       <div class="project-card-body">
         <p class="eyebrow">${esc(district)} · ${esc(project.budget)}</p>
@@ -592,8 +615,8 @@ function projectPage(lang, project) {
         </div>
       </div>
       <div class="before-after case-visual" data-before-after>
-        <img class="before-img" src="${project.beforeImage}" alt="${esc(project.alt[lang])} - ${lang === "he" ? "לפני" : "до"}">
-        <img class="after-img" src="${project.afterImage}" alt="${esc(project.alt[lang])} - ${lang === "he" ? "אחרי" : "после"}">
+        <img class="before-img" src="${publicPath(project.beforeImage)}" alt="${esc(project.alt[lang])} - ${lang === "he" ? "לפני" : "до"}">
+        <img class="after-img" src="${publicPath(project.afterImage)}" alt="${esc(project.alt[lang])} - ${lang === "he" ? "אחרי" : "после"}">
         <input type="range" min="0" max="100" value="52" aria-label="${lang === "he" ? "השוואת לפני ואחרי" : "Сравнение до и после"}">
         <span class="media-badge before">${lang === "he" ? "לפני" : "до"}</span>
         <span class="media-badge after">${lang === "he" ? "אחרי" : "после"}</span>
@@ -833,7 +856,8 @@ function build() {
   fs.mkdirSync(path.join(dist, "admin"), { recursive: true });
   fs.copyFileSync(path.join(root, "src/admin.html"), path.join(dist, "admin", "index.html"));
 
-  writeFile(path.join(dist, "index.html"), `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=/he/"><script>location.replace('/he/')</script><title>ATELIER VERT</title></head><body><a href="/he/">ATELIER VERT</a></body></html>`);
+  const homeRedirect = pageHref("he");
+  writeFile(path.join(dist, "index.html"), `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=${esc(homeRedirect)}"><script>location.replace(${JSON.stringify(homeRedirect)})</script><title>ATELIER VERT</title></head><body><a href="${esc(homeRedirect)}">ATELIER VERT</a></body></html>`);
   for (const lang of Object.keys(languages)) {
     writeFile(path.join(dist, lang, "index.html"), render(lang, "home"));
     for (const slug of pageSlugs) {
@@ -855,7 +879,7 @@ function build() {
     for (const project of projects) sitemapUrls.push(canonical(lang, "project", project.slug));
   }
   writeFile(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapUrls.map((url) => `  <url><loc>${url}</loc></url>`).join("\n")}\n</urlset>\n`);
-  writeFile(path.join(dist, "robots.txt"), "User-agent: *\nAllow: /\nDisallow: /he/thank-you/\nDisallow: /ru/thank-you/\nSitemap: https://atelier-vert.co.il/sitemap.xml\n");
+  writeFile(path.join(dist, "robots.txt"), `User-agent: *\nAllow: /\nDisallow: ${basePath}/he/thank-you/\nDisallow: ${basePath}/ru/thank-you/\nSitemap: ${publicSiteUrl}/sitemap.xml\n`);
 }
 
 build();

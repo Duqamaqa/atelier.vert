@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
+    "build:pages": "ATELIER_BASE_PATH=/atelier.vert ATELIER_SITE_URL=https://duqamaqa.github.io/atelier.vert node scripts/build.mjs",
     "serve": "npm run build && node scripts/server.mjs",
     "serve:static": "npm run build && vite --host 127.0.0.1 dist",
     "check": "npm run build && node scripts/check.mjs"

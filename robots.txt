@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /atelier.vert/he/thank-you/
+Disallow: /atelier.vert/ru/thank-you/
+Sitemap: https://duqamaqa.github.io/atelier.vert/sitemap.xml
