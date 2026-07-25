@@ -334,11 +334,11 @@ export const projects = [
       he: "בדיקה לאחר ההסתגלות והנחיות להשקיה בעונות חמות.",
       ru: "Проверка после адаптации и рекомендации по поливу в жаркий сезон."
     },
-    beforeImage: "/assets/project-ir-yamim-before.svg",
-    afterImage: "/assets/project-ir-yamim-after.svg",
+    beforeImage: "/assets/photos/hero-before.jpg",
+    afterImage: "/assets/photos/hero-after-same-balcony.png",
     alt: {
-      he: "המחשת מרפסת עיר ימים לפני ואחרי הקמה ירוקה",
-      ru: "Иллюстрация балкона в Ир-Ямим до и после озеленения"
+      he: "מרפסת עיר ימים לפני ואחרי הקמה ירוקה",
+      ru: "Балкон в Ир-Ямим до и после озеленения"
     }
   },
   {
@@ -380,11 +380,11 @@ export const projects = [
       he: "ביקור שירות עונתי מומלץ לכיוון השקיה והחלפות נקודתיות.",
       ru: "Рекомендуется сезонный сервисный визит для настройки полива и точечных замен."
     },
-    beforeImage: "/assets/project-agamin-before.svg",
-    afterImage: "/assets/project-agamin-after.svg",
+    beforeImage: "/assets/photos/project-agamin-before.jpg",
+    afterImage: "/assets/photos/project-agamin-after-same-balcony.png",
     alt: {
-      he: "המחשת מרפסת משפחתית באגמים לפני ואחרי תכנון ירוק",
-      ru: "Иллюстрация семейного балкона в Агамим до и после зелёного дизайна"
+      he: "מרפסת משפחתית באגמים לפני ואחרי תכנון ירוק",
+      ru: "Семейный балкон в Агамим до и после зелёного дизайна"
     }
   }
 ];

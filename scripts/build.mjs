@@ -317,8 +317,8 @@ function hero(lang) {
         <p class="price-note">${lang === "he" ? "חבילת Start מ-6 900 ₪ · התקנה טיפוסית 1–3 ימים אחרי מוכנות חומרים" : "Start от 6 900 ₪ · типовой монтаж 1–3 дня после готовности материалов"}</p>
       </div>
       <div class="hero-media before-after" data-before-after>
-        <img class="before-img" src="/assets/hero-before.svg" alt="${lang === "he" ? "המחשת מרפסת ריקה לפני תכנון" : "Иллюстрация пустого балкона до проекта"}">
-        <img class="after-img" src="/assets/hero-after.svg" alt="${lang === "he" ? "המחשת מרפסת ירוקה אחרי הקמה" : "Иллюстрация зелёного балкона после проекта"}">
+        <img class="before-img" src="/assets/photos/hero-before.jpg" alt="${lang === "he" ? "מרפסת ריקה מול הים לפני תכנון ירוק" : "Пустой балкон с видом на море до зелёного проекта"}">
+        <img class="after-img" src="/assets/photos/hero-after-same-balcony.png" alt="${lang === "he" ? "אותה מרפסת מול הים לאחר הוספת כדים וצמחייה" : "Тот же балкон с видом на море после добавления кашпо и растений"}">
         <input type="range" min="0" max="100" value="50" aria-label="${lang === "he" ? "השוואת לפני ואחרי" : "Сравнение до и после"}">
         <span class="media-badge before">${lang === "he" ? "לפני" : "до"}</span>
         <span class="media-badge after">${lang === "he" ? "אחרי" : "после"}</span>

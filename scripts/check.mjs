@@ -137,12 +137,10 @@ function checkServerAndAdmin() {
 function checkAssets() {
   [
     "dist/assets/logo.svg",
-    "dist/assets/hero-before.svg",
-    "dist/assets/hero-after.svg",
-    "dist/assets/project-ir-yamim-before.svg",
-    "dist/assets/project-ir-yamim-after.svg",
-    "dist/assets/project-agamin-before.svg",
-    "dist/assets/project-agamin-after.svg"
+    "dist/assets/photos/hero-before.jpg",
+    "dist/assets/photos/hero-after-same-balcony.png",
+    "dist/assets/photos/project-agamin-before.jpg",
+    "dist/assets/photos/project-agamin-after-same-balcony.png"
   ].forEach((file) => assert(exists(file), `Asset missing: ${file}`));
 }
 
