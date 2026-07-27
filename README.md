@@ -21,9 +21,15 @@ Local fallback admin token: `dev-admin-token`. Set `ATELIER_ADMIN_TOKEN` and `AT
 npm run check
 ```
 
-The check rebuilds the site and verifies bilingual routes, RTL/LTR direction, SEO basics, package prices, FAQ coverage, form fields, analytics event hooks, backend lead API, protected upload/admin routes, and assets.
+The check rebuilds the site and verifies bilingual routes, RTL/LTR direction, SEO basics, package prices, FAQ coverage, form fields, WhatsApp message handoff, analytics event hooks, backend lead API, protected upload/admin routes, and assets.
+
+## Public Lead Flow
+
+The estimate form prepares a WhatsApp message in the visitor's selected communication language (HE/RU/EN). The final button opens WhatsApp with the form details prefilled, so the visitor only needs to attach any photos and tap Send.
 
 ## Server Features
+
+The local server remains available for development or a future backend-backed lead flow:
 
 - `POST /api/leads`: multipart lead submission with server-side validation.
 - Photo validation: JPG/PNG/HEIC/HEIF, up to 5 files, 8 MB per file.

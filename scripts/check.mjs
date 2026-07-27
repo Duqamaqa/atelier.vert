@@ -90,6 +90,8 @@ function checkFormAndEvents() {
     "comment",
     "consent"
   ].forEach((name) => assert(estimate.includes(`name="${name}"`), `Estimate form missing ${name}`));
+  assert(estimate.includes("data-estimate-message-preview"), "Estimate form WhatsApp message preview missing");
+  assert(estimate.includes("Открыть WhatsApp с сообщением"), "Estimate form WhatsApp final button missing");
   const app = read("dist/app.js");
   [
     "view_package",
@@ -100,6 +102,7 @@ function checkFormAndEvents() {
     "photo_upload_error",
     "form_submit",
     "form_error",
+    "estimate_whatsapp_open",
     "whatsapp_click",
     "phone_click",
     "project_view",
@@ -107,6 +110,8 @@ function checkFormAndEvents() {
     "faq_open",
     "language_switch"
   ].forEach((event) => assert(app.includes(event), `Analytics event ${event} missing`));
+  assert(app.includes("buildEstimateWhatsAppMessage"), "Estimate WhatsApp message builder missing");
+  assert(app.includes("photosSelected"), "Estimate WhatsApp photo handoff text missing");
   assert(app.includes("8 * 1024 * 1024"), "Photo size limit check missing");
   assert(app.includes("image/heic"), "HEIC support check missing");
   assert(app.includes("atelier_estimate_draft"), "Draft persistence missing");

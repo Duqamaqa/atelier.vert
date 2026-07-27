@@ -92,8 +92,12 @@
           <label>Имя <span class="required">Обязательно</span><input name="name" type="text" minlength="2" maxlength="60" required></label>
           <label>Телефон <span class="required">Обязательно</span><input name="phone" type="tel" inputmode="tel" pattern="^\+?[0-9 ()-]{7,24}$" required></label>
           <label class="check-row"><input type="checkbox" name="consent" required> <span>Я согласен/согласна на связь и обработку переданных данных и фотографий для оценки. <a href="/atelier.vert/ru/privacy/">Политика конфиденциальности</a></span></label>
+          <label class="message-preview-label">Сообщение, которое откроется в WhatsApp
+            <textarea class="message-preview" rows="11" readonly data-estimate-message-preview aria-live="polite"></textarea>
+            <span class="field-help">После нажатия WhatsApp откроется с готовым сообщением. Если вы выбрали фотографии, прикрепите их в чате перед отправкой.</span>
+          </label>
           <div class="form-error" data-form-error aria-live="assertive"></div>
-          <div class="form-actions"><button type="button" class="button" data-prev>Назад</button><button type="submit" class="button button-primary">Отправить</button></div>
+          <div class="form-actions"><button type="button" class="button" data-prev>Назад</button><button type="submit" class="button button-primary"><svg class="icon icon-message" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.6-4.6A8 8 0 1 1 21 15Z"/></svg><span>Открыть WhatsApp с сообщением</span></button></div>
         </fieldset>
       </form>
       <aside class="estimate-aside">

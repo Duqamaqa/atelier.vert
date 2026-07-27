@@ -273,6 +273,7 @@
     const error = qs("[data-form-error]", form);
     const uploadStatus = qs("[data-upload-status]", form);
     const photoInput = qs("[data-photo-input]", form);
+    const messagePreview = qs("[data-estimate-message-preview]", form);
     const draftKey = `atelier_estimate_draft_${lang}`;
     let current = 0;
 
@@ -283,12 +284,17 @@
     if (packageSelect && params.get("package")) packageSelect.value = params.get("package");
     syncConditionalFields();
     showStep(0);
+    updateEstimateMessagePreview();
     track("estimate_start", { source_page: document.referrer || "direct" });
 
-    form.addEventListener("input", saveDraft);
+    form.addEventListener("input", () => {
+      saveDraft();
+      updateEstimateMessagePreview();
+    });
     form.addEventListener("change", () => {
       syncConditionalFields();
       saveDraft();
+      updateEstimateMessagePreview();
     });
     qsa("[data-next]", form).forEach((button) => button.addEventListener("click", () => {
       if (validateStep(current)) showStep(Math.min(current + 1, steps.length - 1));
@@ -299,34 +305,27 @@
       photoInput.addEventListener("change", () => validatePhotos(true));
     }
 
-    form.addEventListener("submit", async (event) => {
+    form.addEventListener("submit", (event) => {
       event.preventDefault();
       if (!validateStep(current)) return;
       if (form.elements.company && form.elements.company.value) return;
-      if (rateLimited()) {
-        setError(lang === "he" ? "יותר מדי ניסיונות. נסו שוב מאוחר יותר או פתחו WhatsApp." : "Слишком много попыток. Попробуйте позже или откройте WhatsApp.");
-        track("form_error", { error_type: "rate_limit", step: current + 1 });
-        return;
-      }
-      const submitButton = qs('button[type="submit"]', form);
-      if (submitButton) submitButton.disabled = true;
-      try {
-        const lead = await submitLead(form);
-        sessionStorage.setItem("atelier_last_submission", lead.id);
-        localStorage.removeItem(draftKey);
-        track("form_submit", {
-          package: lead.answers.package,
-          district: lead.answers.district,
-          budget: lead.answers.budget,
-          lead_id: lead.id
-        });
-        location.href = `${config.thankYouPath}?lead=${encodeURIComponent(lead.id)}&package=${encodeURIComponent(lead.answers.package || "")}`;
-      } catch (err) {
-        saveOutbox(form, err);
-        setError(lang === "he" ? "השליחה לא הושלמה. הטיוטה נשמרה בדפדפן; אפשר לנסות שוב או לפתוח WhatsApp." : "Отправка не завершилась. Черновик сохранён в браузере; можно попробовать снова или открыть WhatsApp.");
-        track("form_error", { error_type: "submit_failed", step: current + 1 });
-        if (submitButton) submitButton.disabled = false;
-      }
+      const messageLanguage = selectedEstimateLanguage(form);
+      const message = buildEstimateWhatsAppMessage(form);
+      updateEstimateMessagePreview();
+      saveDraft();
+      sessionStorage.setItem("atelier_last_whatsapp_message", message);
+      track("form_submit", {
+        submit_type: "whatsapp",
+        language_choice: messageLanguage,
+        package: String(new FormData(form).get("package") || ""),
+        district: String(new FormData(form).get("district") || ""),
+        budget: String(new FormData(form).get("budget") || "")
+      });
+      track("estimate_whatsapp_open", {
+        language_choice: messageLanguage,
+        photo_count: photoInput?.files?.length || 0
+      });
+      location.href = whatsappUrl(message);
     });
 
     function showStep(index) {
@@ -335,6 +334,7 @@
         step.hidden = stepIndex !== index;
       });
       if (progress) progress.style.inlineSize = `${((index + 1) / steps.length) * 100}%`;
+      updateEstimateMessagePreview();
       track("estimate_step", { step: index + 1, answers_summary: summarizeAnswers(form) });
     }
 
@@ -444,6 +444,11 @@
     function clearError() {
       if (error) error.textContent = "";
     }
+
+    function updateEstimateMessagePreview() {
+      if (!messagePreview) return;
+      messagePreview.value = buildEstimateWhatsAppMessage(form);
+    }
   }
 
   function formDataObject(formData, includePrivate) {
@@ -459,46 +464,6 @@
       }
     }
     return data;
-  }
-
-  async function submitLead(form) {
-    const formData = new FormData(form);
-    const params = new URLSearchParams(location.search);
-    const savedUtm = JSON.parse(sessionStorage.getItem("atelier_utm") || "{}");
-    ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"].forEach((key) => {
-      if (params.get(key)) formData.set(key, params.get(key));
-      else if (savedUtm[key]) formData.set(key, savedUtm[key]);
-    });
-    formData.set("page_language", lang);
-    formData.set("referrer", document.referrer || "");
-    formData.set("landing_page", sessionStorage.getItem("atelier_landing_page") || location.pathname + location.search);
-    formData.set("source_page", currentPageName());
-    const response = await fetch("/api/leads", {
-      method: "POST",
-      body: formData
-    });
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok || !payload.ok) throw new Error(payload.error || "submit_failed");
-    return {
-      id: payload.lead_id,
-      answers: {
-        package: String(formData.get("package") || ""),
-        district: String(formData.get("district") || ""),
-        budget: String(formData.get("budget") || "")
-      }
-    };
-  }
-
-  function saveOutbox(form, err) {
-    const outbox = JSON.parse(localStorage.getItem("atelier_lead_outbox") || "[]");
-    outbox.push({
-      timestamp: new Date().toISOString(),
-      language: lang,
-      reason: err?.message || "submit_failed",
-      answers: formDataObject(new FormData(form), true),
-      note: "Files are not persisted in browser fallback; ask visitor to retry or send photos in WhatsApp."
-    });
-    localStorage.setItem("atelier_lead_outbox", JSON.stringify(outbox.slice(-10)));
   }
 
   function summarizeAnswers(form) {
@@ -520,14 +485,178 @@
     return /^\+?[0-9 ()-]{7,24}$/.test(raw) && digits.length >= 7 && digits.length <= 15;
   }
 
-  function rateLimited() {
-    const key = "atelier_submit_times";
-    const now = Date.now();
-    const hour = 60 * 60 * 1000;
-    const times = JSON.parse(localStorage.getItem(key) || "[]").filter((time) => now - time < hour);
-    times.push(now);
-    localStorage.setItem(key, JSON.stringify(times));
-    return times.length > 5;
+  function whatsappUrl(message) {
+    const number = String(config.whatsappNumber || "").replace(/\D/g, "");
+    return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+  }
+
+  function selectedEstimateLanguage(form) {
+    const preferred = String(form.elements.communication_language?.value || lang || "ru").toLowerCase();
+    return ["he", "ru", "en"].includes(preferred) ? preferred : "ru";
+  }
+
+  function buildEstimateWhatsAppMessage(form) {
+    const messageLang = selectedEstimateLanguage(form);
+    const copy = estimateMessageCopy(messageLang);
+    const data = new FormData(form);
+    const value = (name) => String(data.get(name) || "").trim();
+    const labeled = (group, raw) => labelEstimateValue(messageLang, group, raw);
+    const goals = data.getAll("goals").filter(Boolean).map((goal) => labeled("goals", goal)).join(", ");
+    const district = value("district") === "netanya-other" || value("district") === "outside"
+      ? `${labeled("district", value("district"))}${value("district_other") ? `: ${value("district_other")}` : ""}`
+      : labeled("district", value("district"));
+    const files = form.elements.photos?.files ? Array.from(form.elements.photos.files) : [];
+    const photoLine = files.length
+      ? copy.photosSelected(files.length, files.map((file) => file.name).join(", "))
+      : copy.photosEmpty;
+    const landingPage = sessionStorage.getItem("atelier_landing_page") || location.pathname + location.search;
+    const sourcePage = currentPageName();
+
+    return [
+      copy.greeting,
+      "",
+      copy.contactHeading,
+      `${copy.name}: ${value("name") || copy.empty}`,
+      `${copy.phone}: ${value("phone") || copy.empty}`,
+      `${copy.communicationLanguage}: ${labeled("communication_language", value("communication_language") || messageLang)}`,
+      "",
+      copy.balconyHeading,
+      `${copy.district}: ${district || copy.empty}`,
+      `${copy.area}: ${labeled("area", value("area"))}`,
+      `${copy.floor}: ${value("floor") || copy.empty}`,
+      "",
+      copy.goalHeading,
+      `${copy.sun}: ${labeled("sun", value("sun"))}`,
+      `${copy.goals}: ${goals || copy.empty}`,
+      `${copy.budget}: ${labeled("budget", value("budget"))}`,
+      `${copy.package}: ${labeled("package", value("package"))}`,
+      "",
+      copy.notesHeading,
+      `${copy.comment}: ${value("comment") || copy.empty}`,
+      `${copy.photos}: ${photoLine}`,
+      "",
+      `${copy.source}: ${sourcePage}`,
+      `${copy.landingPage}: ${landingPage}`
+    ].join("\n");
+  }
+
+  function estimateMessageCopy(messageLang) {
+    const copy = {
+      he: {
+        greeting: "שלום ATELIER VERT, אשמח להערכה ראשונית למרפסת. הנה הפרטים מהטופס:",
+        contactHeading: "פרטי קשר",
+        balconyHeading: "מרפסת",
+        goalHeading: "תנאים ומטרה",
+        notesHeading: "הערות ותמונות",
+        name: "שם",
+        phone: "טלפון",
+        communicationLanguage: "שפת תקשורת",
+        district: "אזור / עיר",
+        area: "שטח משוער",
+        floor: "קומה",
+        sun: "שמש",
+        goals: "מטרות",
+        budget: "תקציב רצוי",
+        package: "חבילה מעניינת",
+        comment: "תגובה",
+        photos: "תמונות",
+        source: "עמוד מקור",
+        landingPage: "עמוד נחיתה",
+        empty: "לא צוין",
+        photosEmpty: "לא נבחרו תמונות בטופס. אשלח אותן כאן ב-WhatsApp במידת הצורך.",
+        photosSelected: (count, names) => `נבחרו ${count} תמונות בטופס (${names}). אצרף אותן כאן ב-WhatsApp אחרי פתיחת השיחה.`
+      },
+      ru: {
+        greeting: "Здравствуйте, ATELIER VERT. Хочу получить предварительную оценку балкона. Вот данные из формы:",
+        contactHeading: "Контакты",
+        balconyHeading: "Балкон",
+        goalHeading: "Условия и цель",
+        notesHeading: "Комментарий и фото",
+        name: "Имя",
+        phone: "Телефон",
+        communicationLanguage: "Язык общения",
+        district: "Район / город",
+        area: "Примерная площадь",
+        floor: "Этаж",
+        sun: "Солнце",
+        goals: "Цели",
+        budget: "Желаемый бюджет",
+        package: "Интересующий пакет",
+        comment: "Комментарий",
+        photos: "Фотографии",
+        source: "Страница источника",
+        landingPage: "Страница входа",
+        empty: "не указано",
+        photosEmpty: "Фото не выбраны в форме. При необходимости отправлю их здесь в WhatsApp.",
+        photosSelected: (count, names) => `В форме выбрано фото: ${count} (${names}). Прикреплю их здесь в WhatsApp после открытия чата.`
+      },
+      en: {
+        greeting: "Hello ATELIER VERT. I would like an initial balcony assessment. Here are the details from the form:",
+        contactHeading: "Contact",
+        balconyHeading: "Balcony",
+        goalHeading: "Conditions and goal",
+        notesHeading: "Notes and photos",
+        name: "Name",
+        phone: "Phone",
+        communicationLanguage: "Communication language",
+        district: "Area / city",
+        area: "Approximate area",
+        floor: "Floor",
+        sun: "Sun",
+        goals: "Goals",
+        budget: "Desired budget",
+        package: "Interested package",
+        comment: "Comment",
+        photos: "Photos",
+        source: "Source page",
+        landingPage: "Landing page",
+        empty: "not specified",
+        photosEmpty: "No photos were selected in the form. I will send them here in WhatsApp if needed.",
+        photosSelected: (count, names) => `${count} photos were selected in the form (${names}). I will attach them here in WhatsApp after the chat opens.`
+      }
+    };
+    return copy[messageLang] || copy.ru;
+  }
+
+  function labelEstimateValue(messageLang, group, rawValue) {
+    const raw = String(rawValue || "").trim();
+    const copy = estimateMessageCopy(messageLang);
+    if (!raw) return copy.empty;
+    const labels = estimateValueLabels(messageLang);
+    return labels[group]?.[raw] || raw;
+  }
+
+  function estimateValueLabels(messageLang) {
+    const labels = {
+      he: {
+        communication_language: { he: "עברית", ru: "רוסית", en: "אנגלית" },
+        district: { "ir-yamim": "עיר ימים", agamin: "אגמים", "nof-hatayeleth": "נוף הטיילת", "kiryat-hasharon": "קריית השרון", "ramat-poleg": "רמת פולג", "netanya-other": "נתניה - אחר", outside: "מחוץ לנתניה" },
+        area: { "under-8": "פחות מ-8 מ\"ר", "8-15": "8-15 מ\"ר", "15-30": "15-30 מ\"ר", "30-plus": "30+ מ\"ר", unknown: "לא יודע/ת" },
+        sun: { morning: "בוקר", day: "יום", shade: "צל", unknown: "לא יודע/ת" },
+        goals: { green: "ירוק", privacy: "פרטיות", lounge: "אזור ישיבה", refresh: "חידוש מרפסת קיימת" },
+        budget: { "under-7": "עד 7k", "7-10": "7-10k", "10-20": "10-20k", "20-40": "20-40k", "40-plus": "40k+", unknown: "לא יודע/ת" },
+        package: { start: "Start", signature: "Signature", premium: "Premium", unknown: "לא יודע/ת" }
+      },
+      ru: {
+        communication_language: { he: "иврит", ru: "русский", en: "английский" },
+        district: { "ir-yamim": "Ир-Ямим", agamin: "Агамим", "nof-hatayeleth": "Ноф-ха-Тайелет", "kiryat-hasharon": "Кирьят-ха-Шарон", "ramat-poleg": "Рамат-Полег", "netanya-other": "Нетания - другое", outside: "За пределами Нетании" },
+        area: { "under-8": "меньше 8 м²", "8-15": "8-15 м²", "15-30": "15-30 м²", "30-plus": "30+ м²", unknown: "не знаю" },
+        sun: { morning: "утро", day: "день", shade: "тень", unknown: "не знаю" },
+        goals: { green: "озеленение", privacy: "приватность", lounge: "зона отдыха", refresh: "обновление существующего балкона" },
+        budget: { "under-7": "до 7k", "7-10": "7-10k", "10-20": "10-20k", "20-40": "20-40k", "40-plus": "40k+", unknown: "не знаю" },
+        package: { start: "Start", signature: "Signature", premium: "Premium", unknown: "не знаю" }
+      },
+      en: {
+        communication_language: { he: "Hebrew", ru: "Russian", en: "English" },
+        district: { "ir-yamim": "Ir Yamim", agamin: "Agamim", "nof-hatayeleth": "Nof HaTayelet", "kiryat-hasharon": "Kiryat HaSharon", "ramat-poleg": "Ramat Poleg", "netanya-other": "Netanya - other", outside: "Outside Netanya" },
+        area: { "under-8": "under 8 m²", "8-15": "8-15 m²", "15-30": "15-30 m²", "30-plus": "30+ m²", unknown: "not sure" },
+        sun: { morning: "morning", day: "day", shade: "shade", unknown: "not sure" },
+        goals: { green: "greenery", privacy: "privacy", lounge: "lounge area", refresh: "refresh existing balcony" },
+        budget: { "under-7": "up to 7k", "7-10": "7-10k", "10-20": "10-20k", "20-40": "20-40k", "40-plus": "40k+", unknown: "not sure" },
+        package: { start: "Start", signature: "Signature", premium: "Premium", unknown: "not sure" }
+      }
+    };
+    return labels[messageLang] || labels.ru;
   }
 
   function rememberLandingPage() {

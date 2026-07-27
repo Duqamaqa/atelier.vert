@@ -49,7 +49,12 @@ function esc(value = "") {
 
 function writeFile(filePath, content) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, content);
+  fs.writeFileSync(filePath, normalizeGeneratedContent(filePath, content));
+}
+
+function normalizeGeneratedContent(filePath, content) {
+  if (!/\.(?:html|xml|txt)$/i.test(filePath)) return content;
+  return String(content).replace(/[ \t]+$/gm, "");
 }
 
 function normalizeBasePath(value = "") {
@@ -733,8 +738,12 @@ function estimatePage(lang) {
           ${field(lang, "name", "text", lang === "he" ? "שם" : "Имя", true)}
           ${field(lang, "phone", "tel", lang === "he" ? "טלפון" : "Телефон", true)}
           <label class="check-row"><input type="checkbox" name="consent" required> <span>${lang === "he" ? "אני מסכים/ה שייצרו איתי קשר ושיעבדו את הפרטים והתמונות לצורך הערכה." : "Я согласен/согласна на связь и обработку переданных данных и фотографий для оценки."} <a href="${pageHref(lang, "privacy")}">${lang === "he" ? "מדיניות פרטיות" : "Политика конфиденциальности"}</a></span></label>
+          <label class="message-preview-label">${lang === "he" ? "הודעה שתיפתח ב-WhatsApp" : "Сообщение, которое откроется в WhatsApp"}
+            <textarea class="message-preview" rows="11" readonly data-estimate-message-preview aria-live="polite"></textarea>
+            <span class="field-help">${lang === "he" ? "לאחר הלחיצה WhatsApp ייפתח עם ההודעה מוכנה. אם בחרתם תמונות, צרפו אותן בשיחה לפני השליחה." : "После нажатия WhatsApp откроется с готовым сообщением. Если вы выбрали фотографии, прикрепите их в чате перед отправкой."}</span>
+          </label>
           <div class="form-error" data-form-error aria-live="assertive"></div>
-          <div class="form-actions"><button type="button" class="button" data-prev>${t.common.prev}</button><button type="submit" class="button button-primary">${t.common.send}</button></div>
+          <div class="form-actions"><button type="button" class="button" data-prev>${t.common.prev}</button><button type="submit" class="button button-primary">${icon("message")}<span>${lang === "he" ? "לפתוח WhatsApp עם ההודעה" : "Открыть WhatsApp с сообщением"}</span></button></div>
         </fieldset>
       </form>
       <aside class="estimate-aside">
