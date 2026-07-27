@@ -996,6 +996,60 @@ details p {
   justify-items: end;
 }
 
+.global-whatsapp-cta {
+  width: min(100% - 44px, var(--max));
+  margin: 18px auto 0;
+  padding: 28px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.82fr);
+  gap: 24px;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  background: var(--green-950);
+  color: #fff;
+}
+
+.global-whatsapp-cta h2 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(1.45rem, 2.2vw, 2.25rem);
+  line-height: 1.08;
+}
+
+.global-whatsapp-cta p {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.global-whatsapp-cta .eyebrow {
+  color: #dcc4a4;
+}
+
+.global-whatsapp-actions {
+  display: grid;
+  gap: 12px;
+  justify-items: stretch;
+}
+
+.button-large {
+  min-height: 64px;
+  padding: 15px 18px;
+  font-size: 1rem;
+  line-height: 1.22;
+}
+
+.button-large span {
+  white-space: normal;
+}
+
+.phone-inline {
+  color: #fff;
+  justify-self: center;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 .site-footer {
   padding: 48px max(22px, calc((100vw - var(--max)) / 2)) 62px;
   border-top: 1px solid var(--line);
@@ -1117,6 +1171,7 @@ details p {
 
   .split-section,
   .estimate-layout,
+  .global-whatsapp-cta,
   .footer-grid,
   .case-content {
     grid-template-columns: 1fr;
@@ -1133,6 +1188,11 @@ details p {
 
   .estimate-aside {
     position: static;
+  }
+
+  .global-whatsapp-cta {
+    width: min(100% - 32px, var(--max));
+    padding: 22px;
   }
 
   .mobile-actions {
@@ -1218,6 +1278,10 @@ details p {
 
   .final-cta {
     padding: 28px 20px;
+  }
+
+  .global-whatsapp-cta {
+    margin-block-start: 8px;
   }
 
   .estimate-form,

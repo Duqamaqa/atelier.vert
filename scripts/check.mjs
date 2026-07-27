@@ -94,6 +94,23 @@ function checkContent() {
   }
 }
 
+function checkGlobalWhatsAppCta() {
+  const labels = {
+    he: "שלחו לנו תמונה של המרפסת ב-WhatsApp וקבלו ייעוץ ראשוני",
+    ru: "Отправьте фото вашего балкона в WhatsApp и получите первичную консультацию"
+  };
+  for (const lang of ["he", "ru"]) {
+    const publicPages = [`dist/${lang}/index.html`, ...pageSlugs.map((slug) => `dist/${lang}/${slug}/index.html`)];
+    for (const project of projects) publicPages.push(`dist/${lang}/projects/${project.slug}/index.html`);
+    for (const file of publicPages) {
+      const html = read(file);
+      assert(html.includes('data-page="global-whatsapp-cta"'), `Global WhatsApp CTA missing: ${file}`);
+      assert(html.includes(labels[lang]), `Global WhatsApp CTA label missing: ${file}`);
+      assert(html.includes("+972 50 000 0000"), `Phone number missing beside global WhatsApp CTA: ${file}`);
+    }
+  }
+}
+
 function checkFormAndEvents() {
   const estimate = read("dist/ru/estimate/index.html");
   [
@@ -175,6 +192,7 @@ checkLanguageDirection();
 checkSeo();
 checkAnalytics();
 checkContent();
+checkGlobalWhatsAppCta();
 checkFormAndEvents();
 checkServerAndAdmin();
 checkAssets();

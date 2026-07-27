@@ -186,6 +186,29 @@ function cta(lang, href, label, extra = "") {
   return `<a class="button ${extra}" href="${href}"><span>${esc(label)}</span>${icon("arrow")}</a>`;
 }
 
+function whatsappMainCtaLabel(lang) {
+  return lang === "he"
+    ? "שלחו לנו תמונה של המרפסת ב-WhatsApp וקבלו ייעוץ ראשוני"
+    : "Отправьте фото вашего балкона в WhatsApp и получите первичную консультацию";
+}
+
+function globalWhatsAppCta(lang) {
+  const title = whatsappMainCtaLabel(lang);
+  return `
+    <section class="global-whatsapp-cta" aria-labelledby="global-whatsapp-title-${lang}">
+      <div>
+        <p class="eyebrow">${lang === "he" ? "הדרך המהירה להתחיל" : "Самый быстрый старт"}</p>
+        <h2 id="global-whatsapp-title-${lang}">${esc(title)}</h2>
+        <p>${lang === "he" ? "אפשר לשלוח תמונות, מידות משוערות, אזור ושאלה קצרה. נחזור עם כיוון ראשוני לפני שצריך למלא פרטים נוספים." : "Можно сразу отправить фотографии, примерные размеры, район и короткий вопрос. Мы вернёмся с первичным направлением без лишних шагов."}</p>
+      </div>
+      <div class="global-whatsapp-actions">
+        <a class="button button-primary button-large" href="${whatsappHref(lang)}" data-whatsapp data-page="global-whatsapp-cta">${icon("message")}<span>${esc(title)}</span></a>
+        <a class="phone-inline" href="${brand.phoneHref}" data-phone>${brand.phoneDisplay}</a>
+      </div>
+    </section>
+  `;
+}
+
 function header(lang, page, slug = "") {
   const t = languages[lang];
   const navItems = [
@@ -293,6 +316,7 @@ function layout(lang, page, body, slug = "") {
   <a class="skip-link" href="#main">${lang === "he" ? "דלגו לתוכן" : "К содержанию"}</a>
   ${header(lang, page, slug)}
   <main id="main">${body}</main>
+  ${globalWhatsAppCta(lang)}
   ${footer(lang)}
   <script src="${publicPath("/app.js")}" defer></script>
 </body>
