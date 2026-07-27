@@ -157,7 +157,7 @@ function checkFormAndEvents() {
   assert(app.includes("delete safe.phone"), "Analytics PII stripping missing");
 }
 
-function checkServerAndAdmin() {
+function checkServerAndInternalTools() {
   assert(exists("scripts/server.mjs"), "Local MVP server missing");
   const server = read("scripts/server.mjs");
   [
@@ -172,10 +172,28 @@ function checkServerAndAdmin() {
     "ATELIER_EDITOR_TOKEN",
     "cms-overrides.json"
   ].forEach((needle) => assert(server.includes(needle), `Server feature missing ${needle}`));
-  assert(exists("dist/admin/index.html"), "Admin CMS page missing from dist");
-  const admin = read("dist/admin/index.html");
-  assert(admin.includes("Content CMS"), "Admin content editor missing");
-  assert(admin.includes("Download leads CSV"), "Admin CSV export missing");
+  assert(exists("src/admin.html"), "Internal CMS page source missing");
+  assert(!exists("dist/admin/index.html"), "Internal admin page must not be published");
+}
+
+function checkClientCopy() {
+  const publicHtml = listFiles(dist)
+    .filter((file) => file.endsWith(".html"))
+    .map((file) => fs.readFileSync(file, "utf8"))
+    .join("\n");
+  [
+    "UTM",
+    "referrer",
+    "операционного процесса",
+    "Приоритет A",
+    "Приоритет B",
+    "Стартовый шаблон",
+    "Первичный юридический текст",
+    "В production",
+    "תהליך התפעולי",
+    "עדיפות A",
+    "עדיפות B"
+  ].forEach((needle) => assert(!publicHtml.includes(needle), `Internal copy leaked into public site: ${needle}`));
 }
 
 function checkAssets() {
@@ -195,7 +213,8 @@ checkAnalytics();
 checkContent();
 checkGlobalWhatsAppCta();
 checkFormAndEvents();
-checkServerAndAdmin();
+checkServerAndInternalTools();
+checkClientCopy();
 checkAssets();
 
 if (failures.length) {

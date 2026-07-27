@@ -10,8 +10,7 @@ import {
   processSteps,
   projects,
   serviceAreas,
-  services,
-  testimonialsPolicy
+  services
 } from "../src/content.mjs";
 
 const root = process.cwd();
@@ -102,7 +101,6 @@ function applyCmsOverrides() {
   applyArrayOverride(projects, cms.projects);
   applyArrayOverride(faqItems, cms.faqItems);
   applyArrayOverride(serviceAreas, cms.serviceAreas);
-  if (cms.testimonialsPolicy) Object.assign(testimonialsPolicy, deepMerge(testimonialsPolicy, cms.testimonialsPolicy));
 }
 
 function routePath(lang, page = "home", slug = "") {
@@ -249,7 +247,7 @@ function footer(lang) {
         <div>
           <h2>${lang === "he" ? "אזורי שירות" : "Районы"}</h2>
           <div class="chip-list">
-            ${serviceAreas.map((area) => `<span class="chip">${esc(area[lang])} <small>${area.priority}</small></span>`).join("")}
+            ${serviceAreas.map((area) => `<span class="chip">${esc(area[lang])}</span>`).join("")}
           </div>
         </div>
         <div>
@@ -373,7 +371,7 @@ function hero(lang) {
       <div class="hero-copy">
         <p class="eyebrow">${lang === "he" ? "נתניה · עיר ימים · אגמים · קו החוף" : "Нетания · Ир-Ямим · Агамим · побережье"}</p>
         <h1>${lang === "he" ? "מרפסת ירוקה מוכנה לשמש ולרוח של נתניה" : "Зелёный балкон под ключ для солнца и ветра Нетании"}</h1>
-        <p class="lead">${lang === "he" ? "עיצוב, צמחים, כדים, השקיה אוטומטית, התקנה ותחזוקה במקום אחד. מתחילים מתמונות ומחזירים טווח ברור בלי להבטיח יותר ממה שאפשר לבדוק." : "Дизайн, растения, кашпо, автополив, монтаж и обслуживание в одном процессе. Начинаем с фотографий и даём понятный диапазон без обещаний, которые нельзя проверить."}</p>
+        <p class="lead">${lang === "he" ? "עיצוב, צמחים, כדים, השקיה אוטומטית, התקנה ותחזוקה במקום אחד. מתחילים מתמונות ומציעים כיוון, חבילה וטווח תקציב שמתאימים למרפסת שלכם." : "Дизайн, растения, кашпо, автополив, монтаж и обслуживание в одном процессе. Начинаем с фотографий и предлагаем решение, пакет и ориентир бюджета для вашего балкона."}</p>
         <div class="hero-actions">
           ${cta(lang, pageHref(lang, "estimate"), t.common.estimate, "button-primary")}
           <a class="button button-ghost" href="${whatsappHref(lang)}" data-whatsapp data-page="home-hero">${icon("message")}<span>${t.common.whatsapp}</span></a>
@@ -407,7 +405,7 @@ function problemSolution(lang) {
       <div>
         <p class="eyebrow">${lang === "he" ? "בעיה → פתרון" : "Проблема → решение"}</p>
         <h2>${lang === "he" ? "לא כל מרפסת צריכה אותו פתרון" : "Не каждому балкону подходит одно и то же решение"}</h2>
-        <p>${lang === "he" ? "לפני בחירת צמחים בודקים שימוש, תנאים ותקציב. האתר מכוון לפנייה עם מספיק מידע כדי להכין את השלב הבא." : "Перед подбором растений проверяются сценарий использования, условия и бюджет. Сайт ведёт к заявке с достаточной информацией для следующего шага."}</p>
+        <p>${lang === "he" ? "לפני בחירת צמחים בודקים איך תרצו להשתמש במרפסת, את התנאים בה ואת טווח התקציב." : "Перед подбором растений учитываем, как вы хотите использовать балкон, его условия и комфортный бюджет."}</p>
       </div>
       <div class="solution-grid">
         ${items.map(([title, text]) => `<article class="mini-card"><h3>${esc(title)}</h3><p>${esc(text)}</p></article>`).join("")}
@@ -501,15 +499,15 @@ function homePage(lang) {
       <div class="section-heading">
         <p class="eyebrow">${lang === "he" ? "חבילות" : "Пакеты"}</p>
         <h2>${lang === "he" ? "תקציב ברור לפני שמשאירים פרטים" : "Понятный бюджет до отправки контактов"}</h2>
-        <p>${lang === "he" ? "שלוש רמות שירות, בלי חישוב אוטומטי שמתחזה להצעת מחיר." : "Три уровня услуги без автоматического расчёта, который выглядит как оферта."}</p>
+        <p>${lang === "he" ? "שלוש רמות שירות עם טווחי מחיר ברורים כדי להבין מה מתאים לכם." : "Три уровня услуги с понятными диапазонами цен, чтобы сразу сориентироваться."}</p>
       </div>
       ${packageCards(lang, true)}
     </section>
     <section class="section">
       <div class="section-heading">
         <p class="eyebrow">${lang === "he" ? "קייסים" : "Кейсы"}</p>
-        <h2>${lang === "he" ? "דוגמאות ראשונות למבנה הקייסים" : "Первые примеры структуры кейсов"}</h2>
-        <p>${esc(t.common.photoPolicy)}</p>
+        <h2>${lang === "he" ? "מרפסות לפני ואחרי" : "Балконы до и после"}</h2>
+        <p>${lang === "he" ? "רעיונות למרפסות שמש, רוח, פרטיות ושימוש משפחתי." : "Идеи для солнечных, ветреных, семейных балконов и пространств с приватностью."}</p>
       </div>
       ${featuredProjects(lang)}
     </section>
@@ -525,12 +523,12 @@ function homePage(lang) {
       <div>
         <p class="eyebrow">${lang === "he" ? "תחזוקה" : "Обслуживание"}</p>
         <h2>${lang === "he" ? "אחרי ההתקנה לא נשארים לבד" : "После монтажа клиент не остаётся один"}</h2>
-        <p>${lang === "he" ? "אפשר לתאם ביקורי שירות, התאמות השקיה ועדכונים עונתיים. זה שירות תמיכה, לא הבטחת הישרדות לכל צמח בכל תנאי." : "Можно согласовать сервисные визиты, настройку полива и сезонные обновления. Это поддержка, а не обещание выживания каждого растения при любых условиях."}</p>
+        <p>${lang === "he" ? "אפשר לתאם ביקורי שירות, התאמות השקיה ועדכונים עונתיים כדי שהמרפסת תמשיך להרגיש מטופחת ונעימה." : "Можно согласовать сервисные визиты, настройку полива и сезонные обновления, чтобы балкон оставался ухоженным и приятным."}</p>
         ${cta(lang, pageHref(lang, "maintenance"), lang === "he" ? "לבקש תחזוקה" : "Запросить обслуживание", "button-secondary")}
       </div>
       <article class="quote-card">
-        <h3>${esc(testimonialsPolicy[lang].title)}</h3>
-        <p>${esc(testimonialsPolicy[lang].text)}</p>
+        <h3>${lang === "he" ? "טיפול שממשיך לעבוד" : "Уход, который работает"}</h3>
+        <p>${lang === "he" ? "נשמור על השקיה מדויקת, נרענן צמחייה לפי העונה ונעזור לשמור על מראה ירוק לאורך זמן." : "Поддержим точный полив, обновим растения по сезону и поможем сохранить зелёный вид надолго."}</p>
       </article>
     </section>
     <section class="section final-cta">
@@ -669,7 +667,6 @@ function projectPage(lang, project) {
       <article><h2>${lang === "he" ? "הפתרון" : "Решение"}</h2><p>${esc(project.solution[lang])}</p></article>
       <article><h2>${lang === "he" ? "מה הותקן" : "Что установили"}</h2><ul>${project.scope[lang].map((item) => `<li>${esc(item)}</li>`).join("")}</ul></article>
       <article><h2>${lang === "he" ? "תחזוקה" : "Уход"}</h2><p>${esc(project.maintenance[lang])}</p></article>
-      <article class="note-card"><h2>${lang === "he" ? "הערת פרסום" : "Примечание к публикации"}</h2><p>${lang === "he" ? "לפני השקה ציבורית יש להחליף המחשות בצילומי פרויקט אמיתיים ובאישור לקוח." : "Перед публичным запуском иллюстрации нужно заменить реальными фотографиями проекта и клиентским разрешением."}</p></article>
     </section>
     <section class="section final-cta">
       <h2>${lang === "he" ? "יש לכם מרפסת דומה?" : "У вас похожий балкон?"}</h2>
@@ -687,7 +684,7 @@ function processPage(lang) {
     <section class="section">${processSection(lang)}</section>
     <section class="section split-section">
       <div class="note-card"><h2>${lang === "he" ? "מה להכין לשיחה" : "Что подготовить к консультации"}</h2><ul>${(lang === "he" ? ["2–5 תמונות באור יום", "גודל משוער או מספר אריחים", "כיוון שמש ושעות שמש", "טווח תקציב נוח", "בעיות קיימות: ניקוז, רוח, גישה"] : ["2–5 фотографий при дневном свете", "Примерный размер или число плиток", "Ориентация и часы солнца", "Комфортный бюджет", "Проблемы: дренаж, ветер, доступ"]).map((item) => `<li>${esc(item)}</li>`).join("")}</ul></div>
-      <div><h2>${lang === "he" ? "לא מאבדים מידע בדרך" : "Информация не теряется"}</h2><p>${lang === "he" ? "הטופס שומר טיוטה בדפדפן, מעביר חבילה נבחרת ומצרף UTM/עמוד נחיתה לליד." : "Форма сохраняет черновик в браузере, передаёт выбранный пакет и добавляет UTM/landing page к лиду."}</p></div>
+      <div><h2>${lang === "he" ? "מה קורה אחר כך" : "Что происходит дальше"}</h2><p>${lang === "he" ? "נעבור על התמונות והפרטים, ניצור קשר ונציע את הצעד הנכון למרפסת שלכם." : "Мы посмотрим фотографии и параметры, свяжемся с вами и предложим подходящий следующий шаг."}</p></div>
     </section>
   `;
 }
@@ -697,9 +694,9 @@ function maintenancePage(lang) {
     ? [["ביקור בדיקה", "כיוון השקיה, בדיקת קליטה, ניקוי קל והנחיות."], ["עדכון עונתי", "החלפת צמחים נקודתית, התאמה לחום או רוח."], ["תחזוקה שוטפת", "תיאום ביקורים לפי גודל המרפסת ורמת הטיפול הרצויה."]]
     : [["Проверочный визит", "Настройка полива, проверка адаптации, лёгкая уборка и инструкции."], ["Сезонное обновление", "Точечная замена растений, настройка под жару или ветер."], ["Регулярный уход", "Визиты по размеру балкона и желаемому уровню обслуживания."]];
   return `
-    ${pageIntro(lang, "maintenance", lang === "he" ? "שירות אחרי התקנה בלי הבטחות לא אחראיות" : "Поддержка после монтажа без рискованных обещаний")}
+    ${pageIntro(lang, "maintenance", lang === "he" ? "שירות שעוזר למרפסת להישאר נעימה לאורך זמן" : "Поддержка, чтобы балкон оставался красивым и удобным")}
     <section class="section feature-grid">${rows.map(([h, p]) => `<article class="feature-card"><h2>${esc(h)}</h2><p>${esc(p)}</p></article>`).join("")}</section>
-    <section class="section note-card wide"><h2>${lang === "he" ? "אחריות וצמחים" : "Гарантия и растения"}</h2><p>${lang === "he" ? "אחריות על עבודות וצמחים תפורסם רק לאחר אישור מדיניות חוזית אמיתית. התחזוקה מוצגת כשירות שמקטין סיכון ומסביר טיפול, לא כ\"אפס טיפול\"." : "Гарантия на работы и растения публикуется только после утверждения реальной договорной политики. Обслуживание описывается как способ снизить риск и объяснить уход, а не как «нулевой уход»."}</p></section>
+    <section class="section note-card wide"><h2>${lang === "he" ? "התחלה קלה אחרי ההתקנה" : "Лёгкий старт после монтажа"}</h2><p>${lang === "he" ? "בסיום תקבלו הסבר על השקיה וטיפול, כדי להרגיש בטוחים עם המרפסת החדשה מהיום הראשון." : "После монтажа вы получите понятные рекомендации по поливу и уходу, чтобы уверенно пользоваться новым балконом с первого дня."}</p></section>
   `;
 }
 
@@ -709,12 +706,11 @@ function aboutPage(lang) {
     <section class="section split-section">
       <div><h2>${lang === "he" ? "הגישה" : "Подход"}</h2><p>${lang === "he" ? "ATELIER VERT מתייחסת למרפסת כחלל מגורים קטן: נוף, שימוש יומיומי, בטיחות, השקיה ותחזוקה צריכים לעבוד יחד." : "ATELIER VERT относится к балкону как к небольшому жилому пространству: вид, ежедневное использование, безопасность, полив и уход должны работать вместе."}</p></div>
       <div class="metric-grid">
-        <div><strong>≈7 600</strong><span>${lang === "he" ? "משפחות בשוק נגיש לפי מודל עסקי" : "семей в доступном рынке по бизнес-модели"}</span></div>
-        <div><strong>4–6</strong><span>${lang === "he" ? "יעד פרויקטים לחודש" : "цель проектов в месяц"}</span></div>
-        <div><strong>14 750 ₪</strong><span>${lang === "he" ? "צ'ק ממוצע עבודה עם מע\"מ" : "рабочий средний чек с НДС"}</span></div>
+        <div><strong>${lang === "he" ? "תכנון" : "Планирование"}</strong><span>${lang === "he" ? "לפי אורח החיים, השמש והרוח במרפסת." : "С учётом образа жизни, солнца и ветра на балконе."}</span></div>
+        <div><strong>${lang === "he" ? "הקמה" : "Реализация"}</strong><span>${lang === "he" ? "צמחים, כדים והשקיה במרחב אחד מסודר." : "Растения, кашпо и полив в одном продуманном пространстве."}</span></div>
+        <div><strong>${lang === "he" ? "ליווי" : "Поддержка"}</strong><span>${lang === "he" ? "הדרכה ושירות לפי הצורך אחרי ההתקנה." : "Инструкции и сервис по необходимости после монтажа."}</span></div>
       </div>
     </section>
-    <section class="section note-card wide"><h2>${lang === "he" ? "דיוק במספרים" : "О рыночных цифрах"}</h2><p>${lang === "he" ? "נתוני השוק מוצגים כמודל עסקי פנימי. האתר משתמש רק במסר רך: אלפי מרפסות בנתניה יכולות להפוך לחלל ירוק." : "Оценка рынка используется как бизнес-модель. Сайт использует только мягкую формулировку: тысячи балконов в Нетании можно превратить в зелёное пространство."}</p></section>
   `;
 }
 
@@ -730,7 +726,7 @@ function faqPage(lang) {
 function estimatePage(lang) {
   const t = languages[lang];
   return `
-    ${pageIntro(lang, "estimate", lang === "he" ? "טופס קצר שמכין ליד איכותי" : "Короткая форма, которая готовит качественный лид")}
+    ${pageIntro(lang, "estimate", lang === "he" ? "כמה פרטים קצרים כדי להבין את המרפסת שלכם" : "Несколько коротких вопросов, чтобы понять ваш балкон")}
     <section class="section estimate-layout">
       <form class="estimate-form" data-estimate-form novalidate>
         <input type="text" name="company" tabindex="-1" autocomplete="off" class="honeypot" aria-hidden="true">
@@ -786,7 +782,6 @@ function estimatePage(lang) {
         <h2>${lang === "he" ? "אפשר גם ב-WhatsApp" : "Можно через WhatsApp"}</h2>
         <p>${lang === "he" ? "ההודעה נפתחת עם בקשה לאזור, גודל, 2–3 תמונות ותקציב." : "Сообщение откроется с просьбой прислать район, размер, 2–3 фото и бюджет."}</p>
         <a class="button button-full button-ghost" href="${whatsappHref(lang)}" data-whatsapp data-page="estimate">${icon("message")}<span>${t.common.whatsapp}</span></a>
-        <div class="note-card"><h2>${lang === "he" ? "מה נשמר בליד" : "Что сохраняется в лиде"}</h2><p>${lang === "he" ? "מזהה, זמן, שפה, תשובות, שמות קבצים, UTM, referrer, עמוד נחיתה והסכמה. אנליטיקה לא מקבלת שם, טלפון, תגובה או URL תמונה." : "ID, время, язык, ответы, имена файлов, UTM, referrer, landing page и согласие. Аналитика не получает имя, телефон, комментарий или URL фото."}</p></div>
       </aside>
     </section>
   `;
@@ -808,7 +803,7 @@ function field(lang, name, type, label, required = false, options = [], value = 
 
 function contactPage(lang) {
   return `
-    ${pageIntro(lang, "contact", lang === "he" ? "נתניה קודם, בקשות חוץ מסומנות לבדיקה" : "Нетания в приоритете, внешние заявки помечаются для проверки")}
+    ${pageIntro(lang, "contact", lang === "he" ? "שלחו תמונה ונעזור להתחיל" : "Пришлите фото, и мы поможем начать")}
     <section class="section contact-grid">
       <div class="contact-card"><h2>${lang === "he" ? "WhatsApp" : "WhatsApp"}</h2><p>${lang === "he" ? "הדרך המהירה לשלוח תמונות ומידע בסיסי." : "Самый быстрый способ отправить фото и базовые параметры."}</p><a class="button button-full button-primary" href="${whatsappHref(lang)}" data-whatsapp data-page="contact">${icon("message")}<span>${languages[lang].common.whatsapp}</span></a></div>
       <div class="contact-card"><h2>${lang === "he" ? "טלפון" : "Телефон"}</h2><p><a href="${brand.phoneHref}" data-phone>${brand.phoneDisplay}</a></p><p>${esc(brand.responseWindow[lang])}</p></div>
@@ -816,7 +811,7 @@ function contactPage(lang) {
     </section>
     <section class="section">
       <div class="section-heading"><h2>${lang === "he" ? "אזורי שירות" : "Зона работы"}</h2></div>
-      <div class="area-grid">${serviceAreas.map((area) => `<article class="area-card"><strong>${esc(area[lang])}</strong><span>${area.priority === "A" ? (lang === "he" ? "עדיפות A" : "Приоритет A") : (lang === "he" ? "עדיפות B" : "Приоритет B")}</span></article>`).join("")}</div>
+      <div class="area-grid">${serviceAreas.map((area) => `<article class="area-card"><strong>${esc(area[lang])}</strong><span>${lang === "he" ? "נתניה והסביבה" : "Нетания и рядом"}</span></article>`).join("")}</div>
     </section>
   `;
 }
@@ -824,19 +819,18 @@ function contactPage(lang) {
 function legalPage(lang, page) {
   const isPrivacy = page === "privacy";
   return `
-    ${pageIntro(lang, page, languages[lang].common.legalReview)}
+    ${pageIntro(lang, page, isPrivacy ? (lang === "he" ? "פרטיות ושימוש בפרטים" : "Приватность и использование данных") : (lang === "he" ? "גלישה נוחה לכולם" : "Удобный сайт для всех"))}
     <section class="section legal-copy">
       <h2>${isPrivacy ? (lang === "he" ? "איסוף מידע" : "Какие данные собираются") : (lang === "he" ? "מחויבות נגישות" : "Подход к доступности")}</h2>
       <p>${isPrivacy
-        ? (lang === "he" ? "האתר אוסף פרטי קשר, תשובות לשאלון, מטא-דאטה של תמונות, UTM, referrer והסכמה כדי לטפל בבקשת הערכה." : "Сайт собирает контактные данные, ответы формы, метаданные фотографий, UTM, referrer и согласие, чтобы обработать заявку на оценку.")
-        : (lang === "he" ? "האתר נבנה עם HTML סמנטי, ניווט מקלדת, ניגודיות מספקת, טקסט חלופי לתמונות ושמירה על RTL." : "Сайт построен с семантическим HTML, клавиатурной навигацией, достаточным контрастом, alt-текстами и поддержкой RTL.")}
+        ? (lang === "he" ? "אנחנו משתמשים בפרטי הקשר ובתמונות שתשלחו רק כדי לענות על הפנייה ולהכין הערכה למרפסת." : "Мы используем контактные данные и фотографии только чтобы ответить на обращение и подготовить оценку балкона.")
+        : (lang === "he" ? "אנחנו משתדלים שהאתר יהיה ברור, קריא ונוח לשימוש במחשב ובנייד." : "Мы стремимся сделать сайт понятным, читаемым и удобным на компьютере и телефоне.")}
       </p>
       <h2>${isPrivacy ? (lang === "he" ? "תמונות ולידים" : "Фотографии и лиды") : (lang === "he" ? "פנייה על בעיית נגישות" : "Сообщить о проблеме доступности")}</h2>
       <p>${isPrivacy
-        ? (lang === "he" ? "תמונות אינן נשלחות לאנליטיקה. בפרודקשן הן חייבות להישמר באחסון מוגן עם גישה לעובדים מורשים בלבד ותקופת שמירה שאושרה." : "Фотографии не передаются в аналитику. В production они должны храниться в защищённом хранилище с доступом только для авторизованных сотрудников и утверждённым сроком хранения.")
-        : (lang === "he" ? `אפשר לפנות ל-${brand.email} עם תיאור הבעיה, הדפדפן והמכשיר.` : `Можно написать на ${brand.email} с описанием проблемы, браузера и устройства.`)}
+        ? (lang === "he" ? "לא נשתמש בתמונות שלכם בפרסום ללא אישור מפורש. לשאלות על הפרטים שנשלחו אפשר לפנות אלינו ב-WhatsApp או במייל." : "Мы не используем ваши фотографии в рекламе без явного согласия. По вопросам о переданных данных можно написать нам в WhatsApp или по email.")
+        : (lang === "he" ? `נתקלתם בקושי? כתבו לנו ל-${brand.email}, ונשמח לעזור.` : `Если вы столкнулись с трудностью, напишите нам на ${brand.email}, и мы поможем.`)}
       </p>
-      <p class="disclaimer">${esc(languages[lang].common.legalReview)}</p>
     </section>
   `;
 }
@@ -898,8 +892,6 @@ function build() {
   copyDir(path.join(root, "src/assets"), path.join(dist, "assets"));
   fs.copyFileSync(path.join(root, "src/styles.css"), path.join(dist, "styles.css"));
   fs.copyFileSync(path.join(root, "src/app.js"), path.join(dist, "app.js"));
-  fs.mkdirSync(path.join(dist, "admin"), { recursive: true });
-  fs.copyFileSync(path.join(root, "src/admin.html"), path.join(dist, "admin", "index.html"));
 
   const homeRedirect = pageHref("he");
   writeFile(path.join(dist, "index.html"), `<!doctype html>
