@@ -6,13 +6,19 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "build:pages": "ATELIER_BASE_PATH=/atelier.vert ATELIER_SITE_URL=https://duqamaqa.github.io/atelier.vert node scripts/build.mjs",
+    "deploy": "npm run deploy:cloudflare-pages",
+    "deploy:cloudflare-pages": "npm run build && wrangler pages deploy dist --project-name=atelier-vert",
+    "deploy:worker": "npm run build && wrangler deploy",
+    "preview": "npm run build && wrangler pages dev dist",
+    "preview:worker": "npm run build && wrangler dev",
     "serve": "npm run build && node scripts/server.mjs",
     "serve:static": "npm run build && vite --host 127.0.0.1 dist",
     "check": "npm run build && node scripts/check.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.1",
-    "vite": "^7.0.0"
+    "vite": "^7.0.0",
+    "wrangler": "^4.114.0"
   },
   "dependencies": {
     "busboy": "^1.6.0"
