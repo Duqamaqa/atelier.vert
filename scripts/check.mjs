@@ -58,6 +58,27 @@ function checkSeo() {
   assertIncludes("dist/robots.txt", "Disallow: /ru/thank-you/", "robots must disallow RU thank-you");
 }
 
+function checkAnalytics() {
+  const measurementId = "G-303HM0FE6C";
+  const htmlFiles = listFiles(dist).filter((file) => file.endsWith(".html"));
+  for (const filePath of htmlFiles) {
+    const html = fs.readFileSync(filePath, "utf8");
+    const relative = path.relative(root, filePath);
+    const tagMatches = html.match(new RegExp(`googletagmanager\\.com/gtag/js\\?id=${measurementId}`, "g")) || [];
+    assert(tagMatches.length === 1, `Google tag must appear exactly once in ${relative}`);
+    assert(html.includes(`gtag("config", "${measurementId}")`), `Google Analytics config missing in ${relative}`);
+  }
+  const app = read("dist/app.js");
+  assert(app.includes('window.gtag("event", event, safe)'), "Custom events are not sent to gtag");
+}
+
+function listFiles(directory) {
+  return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const filePath = path.join(directory, entry.name);
+    return entry.isDirectory() ? listFiles(filePath) : [filePath];
+  });
+}
+
 function checkContent() {
   for (const lang of ["he", "ru"]) {
     const packagesHtml = read(`dist/${lang}/packages/index.html`);
@@ -152,6 +173,7 @@ function checkAssets() {
 checkRoutes();
 checkLanguageDirection();
 checkSeo();
+checkAnalytics();
 checkContent();
 checkFormAndEvents();
 checkServerAndAdmin();

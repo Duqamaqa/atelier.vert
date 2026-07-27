@@ -27,6 +27,10 @@ The check rebuilds the site and verifies bilingual routes, RTL/LTR direction, SE
 
 The estimate form prepares a WhatsApp message in the visitor's selected communication language (HE/RU/EN). The final button opens WhatsApp with the form details prefilled, so the visitor only needs to attach any photos and tap Send.
 
+## Analytics
+
+Google Analytics is installed with GA4 measurement ID `G-303HM0FE6C`. Existing safe interaction events are sent through both `dataLayer` and `gtag`.
+
 ## Server Features
 
 The local server remains available for development or a future backend-backed lead flow:
@@ -44,5 +48,5 @@ The local server remains available for development or a future backend-backed le
 - Real WhatsApp/phone/social links.
 - At least two approved real demo cases with real photos and alt text.
 - Legal-reviewed privacy, accessibility, terms/cookies/consent copy for Israel.
-- GA4/GTM IDs, consent setup, Search Console and Bing verification.
+- Consent setup, Search Console and Bing verification.
 - Final CRM/storage decision if replacing local JSON/files with HubSpot, Airtable, S3, or another provider.

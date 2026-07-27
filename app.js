@@ -11,6 +11,7 @@
     delete safe.photo_url;
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event, ...safe });
+    if (typeof window.gtag === "function") window.gtag("event", event, safe);
     if (window.console) console.debug("[atelier-event]", event, safe);
   }
 

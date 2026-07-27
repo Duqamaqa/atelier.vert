@@ -18,6 +18,7 @@ const root = process.cwd();
 const dist = path.join(root, "dist");
 const basePath = normalizeBasePath(process.env.ATELIER_BASE_PATH || "");
 const publicSiteUrl = normalizeSiteUrl(process.env.ATELIER_SITE_URL || brand.siteUrl);
+const googleAnalyticsId = "G-303HM0FE6C";
 
 applyCmsOverrides();
 
@@ -131,6 +132,17 @@ function publicPath(value) {
 
 function whatsappHref(lang) {
   return `https://wa.me/${brand.whatsappNumber}?text=${encodeURIComponent(languages[lang].whatsappText)}`;
+}
+
+function googleTag() {
+  return `<!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "${googleAnalyticsId}");
+  </script>`;
 }
 
 function metaTitle(lang, page, slug = "") {
@@ -248,6 +260,7 @@ function layout(lang, page, body, slug = "") {
   return `<!doctype html>
 <html lang="${lang}" dir="${t.dir}">
 <head>
+  ${googleTag()}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${esc(title)}</title>
@@ -273,7 +286,6 @@ function layout(lang, page, body, slug = "") {
       thankYouPath: pageHref(lang, "thankYou"),
       labels: t.common
     })};
-    window.dataLayer = window.dataLayer || [];
   </script>
   ${jsonLd(lang, page, slug)}
 </head>
@@ -866,7 +878,17 @@ function build() {
   fs.copyFileSync(path.join(root, "src/admin.html"), path.join(dist, "admin", "index.html"));
 
   const homeRedirect = pageHref("he");
-  writeFile(path.join(dist, "index.html"), `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=${esc(homeRedirect)}"><script>location.replace(${JSON.stringify(homeRedirect)})</script><title>ATELIER VERT</title></head><body><a href="${esc(homeRedirect)}">ATELIER VERT</a></body></html>`);
+  writeFile(path.join(dist, "index.html"), `<!doctype html>
+<html>
+<head>
+  ${googleTag()}
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="0; url=${esc(homeRedirect)}">
+  <script>location.replace(${JSON.stringify(homeRedirect)})</script>
+  <title>ATELIER VERT</title>
+</head>
+<body><a href="${esc(homeRedirect)}">ATELIER VERT</a></body>
+</html>`);
   for (const lang of Object.keys(languages)) {
     writeFile(path.join(dist, lang, "index.html"), render(lang, "home"));
     for (const slug of pageSlugs) {
