@@ -106,7 +106,8 @@ function checkGlobalWhatsAppCta() {
       const html = read(file);
       assert(html.includes('data-page="global-whatsapp-cta"'), `Global WhatsApp CTA missing: ${file}`);
       assert(html.includes(labels[lang]), `Global WhatsApp CTA label missing: ${file}`);
-      assert(html.includes("+972 50 000 0000"), `Phone number missing beside global WhatsApp CTA: ${file}`);
+      assert(html.includes("0552949134"), `Phone number missing beside global WhatsApp CTA: ${file}`);
+      assert(html.includes("https://wa.me/972552949134"), `WhatsApp number missing from global CTA: ${file}`);
     }
   }
 }

@@ -3,9 +3,9 @@ export const brand = {
   he: "האטלייה הירוק",
   siteUrl: "https://atelier-vert.co.il",
   email: "hello@atelier-vert.co.il",
-  phoneDisplay: "+972 50 000 0000",
-  phoneHref: "tel:+972500000000",
-  whatsappNumber: "972500000000",
+  phoneDisplay: "0552949134",
+  phoneHref: "tel:+972552949134",
+  whatsappNumber: "972552949134",
   instagram: "#",
   facebook: "#",
   responseWindow: {
