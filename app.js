@@ -2,6 +2,23 @@
   const config = window.ATELIER || {};
   const lang = config.lang || document.documentElement.lang || "he";
   const labels = config.labels || {};
+  const clarityEvents = new Set([
+    "whatsapp_click",
+    "before_after_interaction",
+    "hero_scroll_prompt_click",
+    "view_package",
+    "package_select",
+    "faq_open",
+    "estimate_start",
+    "estimate_step",
+    "form_submit",
+    "estimate_whatsapp_open",
+    "form_error"
+  ]);
+
+  function clarity(command, ...args) {
+    if (typeof window.clarity === "function") window.clarity(command, ...args);
+  }
 
   function track(event, params = {}) {
     const safe = { ...params, language: lang };
@@ -12,6 +29,12 @@
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event, ...safe });
     if (typeof window.gtag === "function") window.gtag("event", event, safe);
+    if (clarityEvents.has(event)) {
+      clarity("event", event);
+      if (event === "whatsapp_click" && safe.cta) {
+        clarity("event", `whatsapp_${String(safe.cta).replace(/[^a-z0-9_-]/gi, "_")}`);
+      }
+    }
     if (window.console) console.debug("[atelier-event]", event, safe);
   }
 
@@ -27,6 +50,15 @@
     const parts = routeParts();
     if (parts[1] === "projects" && parts[2]) return "project";
     return parts[1] || "home";
+  }
+
+  function setupClarityContext() {
+    const userAgent = navigator.userAgent || "";
+    const visitContext = /Facebook|FBAN|FBAV|Instagram/i.test(userAgent) ? "meta_in_app" : "standard_browser";
+    clarity("set", "site_language", lang);
+    clarity("set", "page_type", currentPageName());
+    clarity("set", "visit_context", visitContext);
+    clarity("set", "site_release", "clarity-cro-2");
   }
 
   function routeParts() {
@@ -703,6 +735,7 @@
 
   rememberLandingPage();
   rememberAttribution();
+  setupClarityContext();
   setupMenu();
   setupWhatsApp();
   setupLanguageTracking();
