@@ -196,6 +196,10 @@ function cta(lang, href, label, extra = "") {
   return `<a class="button ${extra}" href="${href}"><span>${esc(label)}</span>${icon("arrow")}</a>`;
 }
 
+function whatsappCta(lang, page, ctaKey, label = photoWhatsAppCtaLabel(lang), extra = "button-primary") {
+  return `<a class="button ${extra}" href="${whatsappHref(lang)}" data-whatsapp data-page="${page}" data-whatsapp-cta="${ctaKey}">${icon("message")}<span>${esc(label)}</span></a>`;
+}
+
 function whatsappMainCtaLabel(lang) {
   return lang === "he"
     ? "שלחו לנו תמונה של המרפסת ב-WhatsApp וקבלו ייעוץ ראשוני"
@@ -398,10 +402,11 @@ function hero(lang) {
         <h1>${lang === "he" ? "מרפסת ירוקה מוכנה לשמש ולרוח של נתניה" : "Зелёный балкон под ключ для солнца и ветра Нетании"}</h1>
         <p class="lead">${lang === "he" ? "שלחו 2–3 תמונות ב-WhatsApp וקבלו כיוון ראשוני, חבילה וטווח תקציב שמתאימים למרפסת שלכם." : "Отправьте 2–3 фото в WhatsApp и получите первоначальное решение, подходящий пакет и ориентир бюджета для вашего балкона."}</p>
         <div class="hero-actions">
-          <a class="button button-primary" href="${whatsappHref(lang)}" data-whatsapp data-page="home-hero" data-whatsapp-cta="hero-photo">${icon("message")}<span>${esc(photoWhatsAppCtaLabel(lang))}</span></a>
+          ${whatsappCta(lang, "home-hero", "hero-photo")}
           ${cta(lang, pageHref(lang, "estimate"), estimateAlternativeCtaLabel(lang), "button-secondary")}
         </div>
         <p class="price-note">${lang === "he" ? "חבילת Start מ-6 900 ₪ · מתחילים מ-2–3 תמונות" : "Start от 6 900 ₪ · для старта достаточно 2–3 фото"}</p>
+        <a class="hero-next-link" href="#inspiration" data-scroll-cta data-scroll-cta-key="hero-inspiration">${lang === "he" ? "לראות שינוי אמיתי במרפסת" : "Посмотреть реальное преображение балкона"}${icon("arrow")}</a>
       </div>
       <div class="hero-media before-after" data-before-after>
         <img class="before-img" src="${publicPath("/assets/photos/hero-before.jpg")}" alt="${lang === "he" ? "מרפסת ריקה מול הים לפני תכנון ירוק" : "Пустой балкон с видом на море до зелёного проекта"}">
@@ -421,16 +426,53 @@ function trustStrip(lang) {
   return `<section class="trust-strip" aria-label="${lang === "he" ? "עובדות אמון" : "Факты доверия"}">${facts.map(([a, b]) => `<div><strong>${esc(a)}</strong><span>${esc(b)}</span></div>`).join("")}</section>`;
 }
 
+function inspirationSection(lang) {
+  const project = projects.find((item) => item.slug === "agamin-family-balcony");
+  const copy = lang === "he"
+    ? {
+        eyebrow: "השראה מפרויקט אמיתי",
+        title: "מרפסת משפחתית שהופכת למקום שנעים להישאר בו",
+        body: "באגמים בנינו שכבות ירק, אזור ישיבה ופרטיות, תוך שמירה על מעבר נוח ועל התאמה לשמש ולתחזוקה שהמשפחה רוצה.",
+        points: ["אזור ישיבה נעים", "פרטיות עם שכבות ירק", "תכנון לפי שמש ותחזוקה"],
+        project: "לצפות בפרויקט המלא"
+      }
+    : {
+        eyebrow: "Вдохновение из реального проекта",
+        title: "Семейный балкон, на котором хочется задержаться",
+        body: "В Агамим мы создали зелёные уровни, зону отдыха и приватность, сохранив удобный проход и учитывая солнце и желаемый уровень ухода.",
+        points: ["Уютная зона отдыха", "Приватность за счёт зелени", "Планирование по солнцу и уходу"],
+        project: "Посмотреть проект целиком"
+      };
+  return `
+    <section class="section inspiration" id="inspiration">
+      <div class="inspiration-media">
+        <img src="${publicPath(project.afterImage)}" alt="${esc(project.alt[lang])}" loading="lazy" decoding="async">
+      </div>
+      <div class="inspiration-copy">
+        <p class="eyebrow">${copy.eyebrow}</p>
+        <h2>${copy.title}</h2>
+        <p>${copy.body}</p>
+        <div class="chip-list">${copy.points.map((point) => `<span class="chip">${esc(point)}</span>`).join("")}</div>
+        <div class="hero-actions">
+          ${whatsappCta(lang, "home-inspiration", "inspiration-photo")}
+          ${cta(lang, pageHref(lang, "project", project.slug), copy.project, "button-secondary")}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
 function problemSolution(lang) {
   const items = lang === "he"
-    ? [["מרפסת ריקה", "הופכת לאזור שאפשר להשתמש בו כל יום."], ["צמחים שנשרפים", "נבחרים לפי שמש, רוח ויכולת טיפול."], ["בלגן של עציצים", "מוחלף בתכנון שכבות, כדים ומעברים."], ["חשש מתחזוקה", "נענה בהשקיה, הדרכה ואפשרות שירות."]]
-    : [["Пустой балкон", "Становится зоной, которой можно пользоваться каждый день."], ["Растения погибают", "Подбор идёт по солнцу, ветру и готовности ухаживать."], ["Случайные горшки", "Заменяются планом слоёв, кашпо и проходов."], ["Страх ухода", "Снимается поливом, инструкцией и сервисом."]];
+    ? [["צל ופרטיות", "שכבות ירק ותכנון נכון עוזרים לייצר אזור נעים ומופרד."], ["צמחים שמתאימים למקום", "הבחירה נעשית לפי שמש, רוח ויכולת טיפול."], ["מרחב שנוח להשתמש בו", "מתכננים אזור ישיבה ומעבר חופשי, לא רק אוסף כדים."], ["תחזוקה שפויה", "השקיה, הדרכה ואפשרות שירות שומרים על השגרה פשוטה."]]
+    : [["Тень и приватность", "Зелёные уровни и продуманное размещение помогают создать уютную, отделённую зону."], ["Растения для конкретного места", "Подбор идёт по солнцу, ветру и готовности ухаживать."], ["Пространство для жизни", "Планируем зону отдыха и свободный проход, а не просто набор кашпо."], ["Понятный уход", "Полив, инструкция и возможность сервиса помогают сохранить простую рутину."]];
   return `
-    <section class="section split-section">
+    <section class="section split-section benefits-section" data-home-benefits>
       <div>
-        <p class="eyebrow">${lang === "he" ? "בעיה → פתרון" : "Проблема → решение"}</p>
-        <h2>${lang === "he" ? "לא כל מרפסת צריכה אותו פתרון" : "Не каждому балкону подходит одно и то же решение"}</h2>
-        <p>${lang === "he" ? "לפני בחירת צמחים בודקים איך תרצו להשתמש במרפסת, את התנאים בה ואת טווח התקציב." : "Перед подбором растений учитываем, как вы хотите использовать балкон, его условия и комфортный бюджет."}</p>
+        <p class="eyebrow">${lang === "he" ? "מה מקבלים" : "Что меняется"}</p>
+        <h2>${lang === "he" ? "מרפסת ירוקה מתוכננת היטב מרגישה אחרת ביום-יום" : "Продуманный зелёный балкон по-другому ощущается каждый день"}</h2>
+        <p>${lang === "he" ? "קודם מבינים איך תרצו להשתמש במרפסת, ואז מתאימים את הצמחייה, הכדים וההשקיה לתנאים האמיתיים שלה." : "Сначала понимаем, как вы хотите пользоваться балконом, а затем подбираем растения, кашпо и полив под его реальные условия."}</p>
+        <div class="benefits-action">${whatsappCta(lang, "home-benefits", "benefits-photo", lang === "he" ? "לבדוק מה יתאים למרפסת שלי" : "Понять, что подойдёт моему балкону")}</div>
       </div>
       <div class="solution-grid">
         ${items.map(([title, text]) => `<article class="mini-card"><h3>${esc(title)}</h3><p>${esc(text)}</p></article>`).join("")}
@@ -451,8 +493,7 @@ function packageCards(lang, compact = false) {
           </div>
           <p class="muted">${esc(pkg.size[lang])}</p>
           <p>${esc(pkg.accent[lang])}</p>
-          <ul>${pkg.includes[lang].map((item) => `<li>${esc(item)}</li>`).join("")}</ul>
-          <p class="small-note">${esc(pkg.exclusions[lang])}</p>
+          ${compact ? "" : `<ul>${pkg.includes[lang].map((item) => `<li>${esc(item)}</li>`).join("")}</ul><p class="small-note">${esc(pkg.exclusions[lang])}</p>`}
           <a class="button button-full" data-package-select="${pkg.id}" href="${pageHref(lang, "estimate")}?package=${pkg.id}">${esc(pkg.cta[lang])}</a>
         </article>
       `).join("")}
@@ -476,7 +517,7 @@ function projectCard(lang, project) {
   return `
     <article class="project-card" data-project-card data-size="${project.size}" data-exposure="${project.exposure}" data-package="${project.packageId}" data-district="${project.districtKey}" data-goal="${project.goal}">
       <a class="project-image" href="${pageHref(lang, "project", project.slug)}" aria-label="${esc(project.title[lang])}">
-        <img src="${publicPath(project.afterImage)}" alt="${esc(project.alt[lang])}">
+        <img src="${publicPath(project.afterImage)}" alt="${esc(project.alt[lang])}" loading="lazy" decoding="async">
       </a>
       <div class="project-card-body">
         <p class="eyebrow">${esc(district)} · ${esc(project.budget)}</p>
@@ -514,27 +555,45 @@ function netanyaSection(lang) {
   `;
 }
 
+function homeFaqTeaser(lang) {
+  const selected = ["cost", "wind", "maintenance"];
+  const items = faqItems.filter((item) => selected.includes(item.id));
+  return `
+    <section class="section faq-teaser">
+      <div class="section-heading">
+        <p class="eyebrow">${lang === "he" ? "לפני שמתחילים" : "Перед стартом"}</p>
+        <h2>${lang === "he" ? "שלוש תשובות שעוזרות לקבל החלטה" : "Три ответа, которые помогают принять решение"}</h2>
+        <p>${lang === "he" ? "פשוט פתחו את השאלה שמעניינת אתכם. את כל התשובות אפשר למצוא בעמוד השאלות." : "Откройте интересующий вопрос. Остальные ответы собраны на странице FAQ."}</p>
+      </div>
+      <div class="faq-list">${items.map((item) => `<details data-faq="${item.id}"><summary>${esc(item[lang][0])}</summary><p>${esc(item[lang][1])}</p></details>`).join("")}</div>
+      <div class="section-action">${cta(lang, pageHref(lang, "faq"), lang === "he" ? "לכל השאלות והתשובות" : "Все вопросы и ответы", "button-secondary")}</div>
+    </section>
+  `;
+}
+
 function homePage(lang) {
   const t = languages[lang];
   return `
     ${hero(lang)}
     ${trustStrip(lang)}
+    ${inspirationSection(lang)}
     ${problemSolution(lang)}
-    <section class="section">
+    <section class="section" data-home-portfolio>
       <div class="section-heading">
-        <p class="eyebrow">${lang === "he" ? "חבילות" : "Пакеты"}</p>
-        <h2>${lang === "he" ? "תקציב ברור לפני שמשאירים פרטים" : "Понятный бюджет до отправки контактов"}</h2>
-        <p>${lang === "he" ? "שלוש רמות שירות עם טווחי מחיר ברורים כדי להבין מה מתאים לכם." : "Три уровня услуги с понятными диапазонами цен, чтобы сразу сориентироваться."}</p>
-      </div>
-      ${packageCards(lang, true)}
-    </section>
-    <section class="section">
-      <div class="section-heading">
-        <p class="eyebrow">${lang === "he" ? "קייסים" : "Кейсы"}</p>
+        <p class="eyebrow">${lang === "he" ? "פרויקטים אמיתיים" : "Реальные проекты"}</p>
         <h2>${lang === "he" ? "מרפסות לפני ואחרי" : "Балконы до и после"}</h2>
-        <p>${lang === "he" ? "רעיונות למרפסות שמש, רוח, פרטיות ושימוש משפחתי." : "Идеи для солнечных, ветреных, семейных балконов и пространств с приватностью."}</p>
+        <p>${lang === "he" ? "כל קייס כולל תנאים, מגבלות וטווח תקציב, כדי לראות מה אפשרי במרפסת דומה." : "В каждом кейсе есть условия, ограничения и диапазон бюджета, чтобы оценить возможности для похожего балкона."}</p>
       </div>
       ${featuredProjects(lang)}
+      <div class="portfolio-micro-cta">${whatsappCta(lang, "home-portfolio", "portfolio-photo", lang === "he" ? "לשלוח תמונה למקרה דומה" : "Отправить фото похожего балкона")}</div>
+    </section>
+    <section class="section pricing-preview">
+      <div class="section-heading">
+        <p class="eyebrow">${lang === "he" ? "חבילות" : "Пакеты"}</p>
+        <h2>${lang === "he" ? "נקודת התחלה ברורה לתקציב" : "Понятная точка старта по бюджету"}</h2>
+        <p>${lang === "he" ? "שלוש רמות שירות עם טווחי מחיר. פירוט מלא זמין רק למי שרוצה להעמיק." : "Три уровня услуги с диапазонами цен. Полные детали доступны тем, кто хочет углубиться."}</p>
+      </div>
+      ${packageCards(lang, true)}
     </section>
     <section class="section">
       <div class="section-heading">
@@ -556,12 +615,13 @@ function homePage(lang) {
         <p>${lang === "he" ? "נשמור על השקיה מדויקת, נרענן צמחייה לפי העונה ונעזור לשמור על מראה ירוק לאורך זמן." : "Поддержим точный полив, обновим растения по сезону и поможем сохранить зелёный вид надолго."}</p>
       </article>
     </section>
+    ${homeFaqTeaser(lang)}
     <section class="section final-cta">
       <h2>${lang === "he" ? "מתחילים מתמונות, לא מניחושים" : "Начинаем с фотографий, а не с догадок"}</h2>
-      <p>${lang === "he" ? "שלחו פרטים בסיסיים, ואם התמונות עדיין לא מוכנות אפשר לפתוח WhatsApp עם הודעה מוכנה." : "Отправьте базовые параметры, а если фото пока не готовы, можно открыть WhatsApp с готовым текстом."}</p>
+      <p>${lang === "he" ? "שלחו 2–3 תמונות, מידה משוערת והאזור בנתניה. נחזור עם כיוון ראשוני וחבילת שירות מתאימה." : "Отправьте 2–3 фото, примерный размер и район в Нетании. Мы вернёмся с первоначальным направлением и подходящим пакетом."}</p>
       <div class="hero-actions">
-        ${cta(lang, pageHref(lang, "estimate"), t.common.photoCta, "button-primary")}
-        <a class="button button-ghost" href="${whatsappHref(lang)}" data-whatsapp data-page="home-final">${icon("message")}<span>${t.common.whatsapp}</span></a>
+        ${whatsappCta(lang, "home-final", "final-photo", photoWhatsAppCtaLabel(lang), "button-primary")}
+        ${cta(lang, pageHref(lang, "estimate"), estimateAlternativeCtaLabel(lang), "button-ghost")}
       </div>
     </section>
   `;

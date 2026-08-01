@@ -132,6 +132,23 @@ function checkMobileWhatsAppPriority() {
   assert(app.includes('cta: link.dataset.whatsappCta || "generic"'), "WhatsApp CTA source is not tracked");
 }
 
+function checkHomeJourney() {
+  for (const lang of ["he", "ru"]) {
+    const home = read(`dist/${lang}/index.html`);
+    const inspiration = home.indexOf('id="inspiration"');
+    const benefits = home.indexOf("data-home-benefits");
+    const portfolio = home.indexOf("data-home-portfolio");
+    assert(inspiration > 0 && benefits > inspiration && portfolio > benefits, `${lang} home journey must lead from inspiration to benefits to portfolio`);
+    ["hero-photo", "inspiration-photo", "benefits-photo", "portfolio-photo", "final-photo"].forEach((cta) => {
+      assert(home.includes(`data-whatsapp-cta="${cta}"`), `${lang} home WhatsApp CTA missing: ${cta}`);
+    });
+    assert(home.includes("data-scroll-cta"), `${lang} hero scroll prompt missing`);
+    assert((home.match(/data-faq=/g) || []).length >= 3, `${lang} home FAQ teaser must include 3 questions`);
+    assert(home.includes('loading="lazy" decoding="async"'), `${lang} home non-hero images should lazy-load`);
+  }
+  assert(read("dist/app.js").includes("hero_scroll_prompt_click"), "Hero scroll prompt event missing");
+}
+
 function checkFormAndEvents() {
   const estimate = read("dist/ru/estimate/index.html");
   [
@@ -166,6 +183,7 @@ function checkFormAndEvents() {
     "phone_click",
     "project_view",
     "before_after_interaction",
+    "hero_scroll_prompt_click",
     "faq_open",
     "language_switch"
   ].forEach((event) => assert(app.includes(event), `Analytics event ${event} missing`));
@@ -233,6 +251,7 @@ checkAnalytics();
 checkContent();
 checkGlobalWhatsAppCta();
 checkMobileWhatsAppPriority();
+checkHomeJourney();
 checkFormAndEvents();
 checkServerAndInternalTools();
 checkClientCopy();

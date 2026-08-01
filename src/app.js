@@ -158,6 +158,18 @@
     });
   }
 
+  function setupScrollTracking() {
+    qsa("[data-scroll-cta]").forEach((link) => {
+      link.addEventListener("click", () => {
+        track("hero_scroll_prompt_click", {
+          page: currentPageName(),
+          target: link.getAttribute("href") || "",
+          cta: link.dataset.scrollCtaKey || "scroll"
+        });
+      });
+    });
+  }
+
   function setupProjectFilters() {
     const form = qs("[data-project-filters]");
     const list = qs("[data-project-list]");
@@ -697,6 +709,7 @@
   setupPackageTracking();
   setupBeforeAfter();
   setupFaq();
+  setupScrollTracking();
   setupProjectFilters();
   setupProjectView();
   setupCalculator();

@@ -309,6 +309,24 @@ p {
   align-items: center;
 }
 
+.hero-next-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  color: var(--green-800);
+  font-size: 0.94rem;
+  font-weight: 800;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.hero-next-link .icon {
+  inline-size: 18px;
+  block-size: 18px;
+}
+
 .price-note,
 .small-note,
 .disclaimer,
@@ -470,6 +488,48 @@ p {
   align-items: start;
 }
 
+.inspiration {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+  gap: 42px;
+  align-items: center;
+}
+
+.inspiration-media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--stone);
+  box-shadow: var(--shadow);
+}
+
+.inspiration-media img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.inspiration-copy {
+  display: grid;
+  gap: 16px;
+}
+
+.inspiration-copy .chip-list {
+  margin-block: 2px 4px;
+}
+
+.benefits-section {
+  position: relative;
+  padding-block: 66px;
+  border-block: 1px solid var(--line);
+}
+
+.benefits-action,
+.portfolio-micro-cta {
+  margin-block-start: 24px;
+}
+
 .solution-grid,
 .feature-grid,
 .service-grid,
@@ -550,6 +610,14 @@ p {
   display: grid;
   align-content: start;
   gap: 14px;
+}
+
+.pricing-preview .package-card {
+  min-height: 100%;
+}
+
+.pricing-preview .disclaimer {
+  margin-block-end: 0;
 }
 
 .package-head {
@@ -643,6 +711,11 @@ p {
 
 .section-action {
   margin-block-start: 24px;
+}
+
+.portfolio-micro-cta {
+  display: flex;
+  justify-content: center;
 }
 
 .process-steps {
@@ -1103,7 +1176,8 @@ details p {
   }
 
   .hero,
-  .project-hero {
+  .project-hero,
+  .inspiration {
     grid-template-columns: 1fr;
   }
 
@@ -1249,6 +1323,24 @@ details p {
 
   .hero-actions .button,
   .form-actions .button {
+    inline-size: 100%;
+  }
+
+  .hero-next-link {
+    inline-size: 100%;
+    justify-content: center;
+    min-height: 42px;
+  }
+
+  .inspiration {
+    gap: 24px;
+  }
+
+  .benefits-section {
+    padding-block: 48px;
+  }
+
+  .portfolio-micro-cta .button {
     inline-size: 100%;
   }
 
