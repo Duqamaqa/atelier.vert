@@ -73,7 +73,8 @@
       link.addEventListener("click", () => {
         track("whatsapp_click", {
           page: link.dataset.page || currentPageName(),
-          package: link.dataset.package || selectedPackageFromUrl()
+          package: link.dataset.package || selectedPackageFromUrl(),
+          cta: link.dataset.whatsappCta || "generic"
         });
       });
     });

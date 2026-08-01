@@ -109,11 +109,27 @@ function checkGlobalWhatsAppCta() {
     for (const file of publicPages) {
       const html = read(file);
       assert(html.includes('data-page="global-whatsapp-cta"'), `Global WhatsApp CTA missing: ${file}`);
+      assert(html.includes('data-whatsapp-cta="global-photo"'), `Global WhatsApp CTA tracking missing: ${file}`);
       assert(html.includes(labels[lang]), `Global WhatsApp CTA label missing: ${file}`);
       assert(html.includes("0552949134"), `Phone number missing beside global WhatsApp CTA: ${file}`);
       assert(html.includes("https://wa.me/972552949134"), `WhatsApp number missing from global CTA: ${file}`);
     }
   }
+}
+
+function checkMobileWhatsAppPriority() {
+  const expected = {
+    he: "שלחו תמונה ב-WhatsApp",
+    ru: "Отправить фото в WhatsApp"
+  };
+  for (const lang of ["he", "ru"]) {
+    const home = read(`dist/${lang}/index.html`);
+    assert(home.includes('data-page="home-hero" data-whatsapp-cta="hero-photo"'), `${lang} hero WhatsApp CTA tracking missing`);
+    assert(home.includes('data-whatsapp-cta="mobile-photo" class="mobile-action primary"'), `${lang} mobile WhatsApp CTA must be primary`);
+    assert(home.includes(expected[lang]), `${lang} photo CTA label missing`);
+  }
+  const app = read("dist/app.js");
+  assert(app.includes('cta: link.dataset.whatsappCta || "generic"'), "WhatsApp CTA source is not tracked");
 }
 
 function checkFormAndEvents() {
@@ -216,6 +232,7 @@ checkSeo();
 checkAnalytics();
 checkContent();
 checkGlobalWhatsAppCta();
+checkMobileWhatsAppPriority();
 checkFormAndEvents();
 checkServerAndInternalTools();
 checkClientCopy();

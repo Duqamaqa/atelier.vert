@@ -202,6 +202,18 @@ function whatsappMainCtaLabel(lang) {
     : "Отправьте фото вашего балкона в WhatsApp и получите первичную консультацию";
 }
 
+function photoWhatsAppCtaLabel(lang) {
+  return lang === "he" ? "שלחו תמונה ב-WhatsApp" : "Отправить фото в WhatsApp";
+}
+
+function mobilePhotoCtaLabel(lang) {
+  return lang === "he" ? "שלחו תמונה" : "Отправить фото";
+}
+
+function estimateAlternativeCtaLabel(lang) {
+  return lang === "he" ? "או מלאו טופס קצר" : "Или заполните короткую форму";
+}
+
 function globalWhatsAppCta(lang) {
   const title = whatsappMainCtaLabel(lang);
   return `
@@ -212,7 +224,7 @@ function globalWhatsAppCta(lang) {
         <p>${lang === "he" ? "אפשר לשלוח תמונות, מידות משוערות, אזור ושאלה קצרה. נחזור עם כיוון ראשוני לפני שצריך למלא פרטים נוספים." : "Можно сразу отправить фотографии, примерные размеры, район и короткий вопрос. Мы вернёмся с первичным направлением без лишних шагов."}</p>
       </div>
       <div class="global-whatsapp-actions">
-        <a class="button button-primary button-large" href="${whatsappHref(lang)}" data-whatsapp data-page="global-whatsapp-cta">${icon("message")}<span>${esc(title)}</span></a>
+        <a class="button button-primary button-large" href="${whatsappHref(lang)}" data-whatsapp data-page="global-whatsapp-cta" data-whatsapp-cta="global-photo">${icon("message")}<span>${esc(title)}</span></a>
         <a class="phone-inline" href="${brand.phoneHref}" data-phone>${brand.phoneDisplay}</a>
       </div>
     </section>
@@ -274,8 +286,8 @@ function footer(lang) {
       </div>
     </footer>
     <div class="mobile-actions">
-      <a href="${whatsappHref(lang)}" data-whatsapp data-page="mobile-bar" class="mobile-action">${icon("message")}<span>${t.common.whatsapp}</span></a>
-      <a href="${pageHref(lang, "estimate")}" class="mobile-action primary">${icon("leaf")}<span>${t.nav.cta}</span></a>
+      <a href="${whatsappHref(lang)}" data-whatsapp data-page="mobile-bar" data-whatsapp-cta="mobile-photo" class="mobile-action primary">${icon("message")}<span>${esc(mobilePhotoCtaLabel(lang))}</span></a>
+      <a href="${pageHref(lang, "estimate")}" class="mobile-action">${icon("leaf")}<span>${t.nav.cta}</span></a>
     </div>
   `;
 }
@@ -384,12 +396,12 @@ function hero(lang) {
       <div class="hero-copy">
         <p class="eyebrow">${lang === "he" ? "נתניה · עיר ימים · אגמים · קו החוף" : "Нетания · Ир-Ямим · Агамим · побережье"}</p>
         <h1>${lang === "he" ? "מרפסת ירוקה מוכנה לשמש ולרוח של נתניה" : "Зелёный балкон под ключ для солнца и ветра Нетании"}</h1>
-        <p class="lead">${lang === "he" ? "עיצוב, צמחים, כדים, השקיה אוטומטית, התקנה ותחזוקה במקום אחד. מתחילים מתמונות ומציעים כיוון, חבילה וטווח תקציב שמתאימים למרפסת שלכם." : "Дизайн, растения, кашпо, автополив, монтаж и обслуживание в одном процессе. Начинаем с фотографий и предлагаем решение, пакет и ориентир бюджета для вашего балкона."}</p>
+        <p class="lead">${lang === "he" ? "שלחו 2–3 תמונות ב-WhatsApp וקבלו כיוון ראשוני, חבילה וטווח תקציב שמתאימים למרפסת שלכם." : "Отправьте 2–3 фото в WhatsApp и получите первоначальное решение, подходящий пакет и ориентир бюджета для вашего балкона."}</p>
         <div class="hero-actions">
-          ${cta(lang, pageHref(lang, "estimate"), t.common.estimate, "button-primary")}
-          <a class="button button-ghost" href="${whatsappHref(lang)}" data-whatsapp data-page="home-hero">${icon("message")}<span>${t.common.whatsapp}</span></a>
+          <a class="button button-primary" href="${whatsappHref(lang)}" data-whatsapp data-page="home-hero" data-whatsapp-cta="hero-photo">${icon("message")}<span>${esc(photoWhatsAppCtaLabel(lang))}</span></a>
+          ${cta(lang, pageHref(lang, "estimate"), estimateAlternativeCtaLabel(lang), "button-secondary")}
         </div>
-        <p class="price-note">${lang === "he" ? "חבילת Start מ-6 900 ₪ · התקנה טיפוסית 1–3 ימים אחרי מוכנות חומרים" : "Start от 6 900 ₪ · типовой монтаж 1–3 дня после готовности материалов"}</p>
+        <p class="price-note">${lang === "he" ? "חבילת Start מ-6 900 ₪ · מתחילים מ-2–3 תמונות" : "Start от 6 900 ₪ · для старта достаточно 2–3 фото"}</p>
       </div>
       <div class="hero-media before-after" data-before-after>
         <img class="before-img" src="${publicPath("/assets/photos/hero-before.jpg")}" alt="${lang === "he" ? "מרפסת ריקה מול הים לפני תכנון ירוק" : "Пустой балкон с видом на море до зелёного проекта"}">
