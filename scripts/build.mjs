@@ -446,7 +446,7 @@ function inspirationSection(lang) {
   return `
     <section class="section inspiration" id="inspiration">
       <div class="inspiration-media">
-        <img src="${publicPath(project.afterImage)}" alt="${esc(project.alt[lang])}" loading="lazy" decoding="async">
+        <img src="${publicPath("/assets/photos/inspiration-family-balcony.jpg")}" alt="${lang === "he" ? "מרפסת משפחתית באגמים עם אזור ישיבה, צל וצמחייה" : "Семейный балкон в Агамим с зоной отдыха, тенью и зеленью"}" loading="lazy" decoding="async">
       </div>
       <div class="inspiration-copy">
         <p class="eyebrow">${copy.eyebrow}</p>

@@ -240,7 +240,8 @@ function checkAssets() {
     "dist/assets/photos/hero-before.jpg",
     "dist/assets/photos/hero-after-same-balcony.png",
     "dist/assets/photos/project-agamin-before.jpg",
-    "dist/assets/photos/project-agamin-after-same-balcony.png"
+    "dist/assets/photos/project-agamin-after-same-balcony.png",
+    "dist/assets/photos/inspiration-family-balcony.jpg"
   ].forEach((file) => assert(exists(file), `Asset missing: ${file}`));
 }
 
