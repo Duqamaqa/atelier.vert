@@ -243,6 +243,7 @@ function checkAssets() {
     "dist/assets/photos/project-agamin-after-same-balcony.png",
     "dist/assets/photos/inspiration-family-balcony.jpg"
   ].forEach((file) => assert(exists(file), `Asset missing: ${file}`));
+  assert(exists("assets/photos/inspiration-family-balcony.jpg"), "GitHub Pages inspiration asset is missing");
 }
 
 checkRoutes();
