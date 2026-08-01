@@ -18,6 +18,7 @@ const dist = path.join(root, "dist");
 const basePath = normalizeBasePath(process.env.ATELIER_BASE_PATH || "");
 const publicSiteUrl = normalizeSiteUrl(process.env.ATELIER_SITE_URL || brand.siteUrl);
 const googleAnalyticsId = "G-303HM0FE6C";
+const clarityProjectId = "xvjvcg7j1w";
 
 applyCmsOverrides();
 
@@ -140,6 +141,17 @@ function googleTag() {
     function gtag(){dataLayer.push(arguments);}
     gtag("js", new Date());
     gtag("config", "${googleAnalyticsId}");
+  </script>`;
+}
+
+function clarityTag() {
+  return `<!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "${clarityProjectId}");
   </script>`;
 }
 
@@ -282,6 +294,7 @@ function layout(lang, page, body, slug = "") {
 <html lang="${lang}" dir="${t.dir}">
 <head>
   ${googleTag()}
+  ${clarityTag()}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${esc(title)}</title>
@@ -898,6 +911,7 @@ function build() {
 <html>
 <head>
   ${googleTag()}
+  ${clarityTag()}
   <meta charset="utf-8">
   <meta http-equiv="refresh" content="0; url=${esc(homeRedirect)}">
   <script>location.replace(${JSON.stringify(homeRedirect)})</script>

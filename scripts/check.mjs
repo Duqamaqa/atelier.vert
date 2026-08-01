@@ -60,6 +60,7 @@ function checkSeo() {
 
 function checkAnalytics() {
   const measurementId = "G-303HM0FE6C";
+  const clarityProjectId = "xvjvcg7j1w";
   const htmlFiles = listFiles(dist).filter((file) => file.endsWith(".html"));
   for (const filePath of htmlFiles) {
     const html = fs.readFileSync(filePath, "utf8");
@@ -67,6 +68,9 @@ function checkAnalytics() {
     const tagMatches = html.match(new RegExp(`googletagmanager\\.com/gtag/js\\?id=${measurementId}`, "g")) || [];
     assert(tagMatches.length === 1, `Google tag must appear exactly once in ${relative}`);
     assert(html.includes(`gtag("config", "${measurementId}")`), `Google Analytics config missing in ${relative}`);
+    const clarityMatches = html.match(/clarity\.ms\/tag\//g) || [];
+    assert(clarityMatches.length === 1, `Microsoft Clarity tag must appear exactly once in ${relative}`);
+    assert(html.includes(`"clarity", "script", "${clarityProjectId}"`), `Microsoft Clarity project ID missing in ${relative}`);
   }
   const app = read("dist/app.js");
   assert(app.includes('window.gtag("event", event, safe)'), "Custom events are not sent to gtag");
