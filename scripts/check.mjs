@@ -135,6 +135,7 @@ function checkMobileWhatsAppPriority() {
 function checkHomeJourney() {
   for (const lang of ["he", "ru"]) {
     const home = read(`dist/${lang}/index.html`);
+    const projectsPage = read(`dist/${lang}/projects/index.html`);
     const inspiration = home.indexOf('id="inspiration"');
     const benefits = home.indexOf("data-home-benefits");
     const portfolio = home.indexOf("data-home-portfolio");
@@ -145,6 +146,8 @@ function checkHomeJourney() {
     assert(home.includes("data-scroll-cta"), `${lang} hero scroll prompt missing`);
     assert((home.match(/data-faq=/g) || []).length >= 3, `${lang} home FAQ teaser must include 3 questions`);
     assert(home.includes('loading="lazy" decoding="async"'), `${lang} home non-hero images should lazy-load`);
+    assert(home.includes("inspiration-family-balcony.jpg"), `${lang} home inspiration image missing`);
+    assert(projectsPage.includes("inspiration-family-balcony.jpg"), `${lang} Agamim project card image missing`);
   }
   assert(read("dist/app.js").includes("hero_scroll_prompt_click"), "Hero scroll prompt event missing");
 }

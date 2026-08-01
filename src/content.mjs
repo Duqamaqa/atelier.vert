@@ -376,6 +376,11 @@ export const projects = [
     },
     beforeImage: "/assets/photos/project-agamin-before.jpg",
     afterImage: "/assets/photos/project-agamin-after-same-balcony.png",
+    cardImage: "/assets/photos/inspiration-family-balcony.jpg",
+    cardAlt: {
+      he: "מרפסת משפחתית באגמים עם אזור ישיבה, צל וצמחייה",
+      ru: "Семейный балкон в Агамим с зоной отдыха, тенью и зеленью"
+    },
     alt: {
       he: "מרפסת משפחתית באגמים לפני ואחרי תכנון ירוק",
       ru: "Семейный балкон в Агамим до и после зелёного дизайна"

@@ -514,10 +514,12 @@ function featuredProjects(lang) {
 
 function projectCard(lang, project) {
   const district = serviceAreas.find((area) => area.key === project.districtKey)?.[lang] ?? project.districtKey;
+  const image = project.cardImage || project.afterImage;
+  const alt = (project.cardAlt || project.alt)[lang];
   return `
     <article class="project-card" data-project-card data-size="${project.size}" data-exposure="${project.exposure}" data-package="${project.packageId}" data-district="${project.districtKey}" data-goal="${project.goal}">
       <a class="project-image" href="${pageHref(lang, "project", project.slug)}" aria-label="${esc(project.title[lang])}">
-        <img src="${publicPath(project.afterImage)}" alt="${esc(project.alt[lang])}" loading="lazy" decoding="async">
+        <img src="${publicPath(image)}" alt="${esc(alt)}" loading="lazy" decoding="async">
       </a>
       <div class="project-card-body">
         <p class="eyebrow">${esc(district)} · ${esc(project.budget)}</p>
