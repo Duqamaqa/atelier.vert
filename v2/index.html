@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ATELIER VERT — גרסה חדשה (v2)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500&family=Heebo:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c1710;
+    --bg2:#101f14;
+    --panel:#14261a;
+    --line:rgba(214,229,207,.14);
+    --ink:#eef3ea;
+    --muted:#a8bfa8;
+    --accent:#c8e6b0;
+    --gold:#d8c493;
+    --serif:"Frank Ruhl Libre","Times New Roman",serif;
+    --sans:"Heebo","Segoe UI",Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--sans);font-weight:300;
+    line-height:1.65;letter-spacing:.01em;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:1.1rem clamp(1.2rem,4vw,3rem);
+    background:linear-gradient(to bottom,rgba(12,23,16,.92),rgba(12,23,16,.55) 80%,transparent);
+    backdrop-filter:blur(8px);
+  }
+  .brand{display:flex;align-items:center;gap:.7rem}
+  .brand img{width:34px;height:34px}
+  .brand b{font-family:var(--serif);font-weight:500;letter-spacing:.22em;font-size:.95rem}
+  .brand small{display:block;color:var(--muted);font-size:.7rem;letter-spacing:.08em}
+  nav{display:flex;gap:1.6rem;align-items:center;font-size:.9rem}
+  nav a.link{color:var(--muted);transition:color .3s}
+  nav a.link:hover{color:var(--ink)}
+  .cta{
+    border:1px solid var(--gold);color:var(--gold);
+    padding:.5rem 1.3rem;border-radius:999px;
+    font-size:.85rem;transition:background .3s,color .3s;
+  }
+  .cta:hover{background:var(--gold);color:#0c1710}
+  @media(max-width:760px){nav a.link{display:none}}
+
+  /* ---------- hero ---------- */
+  .hero{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:clamp(2rem,5vw,5rem);align-items:center;
+    padding:clamp(2rem,6vh,5rem) clamp(1.2rem,5vw,4rem) clamp(3rem,7vh,6rem);
+    max-width:1400px;margin:0 auto;
+  }
+  .kicker{
+    color:var(--gold);font-size:.78rem;letter-spacing:.3em;
+    text-transform:uppercase;margin-bottom:1.4rem;
+  }
+  h1{
+    font-family:var(--serif);font-weight:400;
+    font-size:clamp(2.4rem,5.2vw,4.3rem);
+    line-height:1.15;margin-bottom:1.4rem;
+  }
+  h1 em{font-style:normal;color:var(--accent)}
+  .hero p.lead{color:var(--muted);max-width:34rem;margin-bottom:2.2rem}
+  .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
+  .btn-primary{
+    background:var(--accent);color:#0c1710;font-weight:500;
+    padding:.85rem 2rem;border-radius:999px;font-size:.95rem;
+    transition:transform .25s,box-shadow .25s;
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(200,230,176,.18)}
+  .btn-ghost{
+    border:1px solid var(--line);padding:.85rem 2rem;border-radius:999px;
+    font-size:.95rem;color:var(--muted);transition:border-color .3s,color .3s;
+  }
+  .btn-ghost:hover{border-color:var(--accent);color:var(--ink)}
+  .hero-note{margin-top:1.6rem;font-size:.8rem;color:var(--muted)}
+  .hero-note b{color:var(--gold);font-weight:400}
+  .hero-media{position:relative;margin-bottom:2.5rem}
+  .hero-media img{
+    border-radius:4px;aspect-ratio:3/4;object-fit:cover;width:100%;
+    box-shadow:0 30px 80px rgba(0,0,0,.5);
+  }
+  .hero-media::after{
+    content:"";position:absolute;inset:0;border-radius:4px;
+    border:1px solid rgba(216,196,147,.25);pointer-events:none;
+  }
+  .badge{
+    position:absolute;bottom:-1.2rem;inset-inline-start:-1.2rem;
+    background:var(--panel);border:1px solid var(--line);
+    padding:.9rem 1.3rem;border-radius:4px;font-size:.82rem;color:var(--muted);
+  }
+  .badge b{display:block;color:var(--ink);font-weight:400;font-size:.95rem}
+  @media(max-width:900px){
+    .hero{grid-template-columns:1fr}
+    .badge{inset-inline-start:1rem}
+  }
+
+  /* ---------- section frame ---------- */
+  section{padding:clamp(3rem,8vh,6rem) clamp(1.2rem,5vw,4rem)}
+  .wrap{max-width:1200px;margin:0 auto}
+  .sec-kicker{color:var(--gold);font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;margin-bottom:1rem}
+  h2{font-family:var(--serif);font-weight:400;font-size:clamp(1.8rem,3.4vw,2.7rem);line-height:1.2;margin-bottom:1rem}
+  .sec-lead{color:var(--muted);max-width:38rem;margin-bottom:2.5rem}
+
+  /* ---------- problem -> solution ---------- */
+  .pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+  .pair>div{background:var(--bg2);padding:2rem 1.8rem}
+  .pair h3{font-family:var(--serif);font-weight:400;font-size:1.25rem;margin-bottom:.5rem}
+  .pair p{color:var(--muted);font-size:.92rem}
+
+  /* ---------- before/after ---------- */
+  .ba{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1rem,3vw,2.5rem);margin-top:3rem}
+  .ba figure{position:relative;overflow:hidden;border-radius:4px}
+  .ba img{aspect-ratio:4/5;object-fit:cover;width:100%;transition:transform .8s ease}
+  .ba figure:hover img{transform:scale(1.03)}
+  .ba figcaption{
+    position:absolute;bottom:0;inset-inline:0;padding:2.5rem 1.4rem 1.2rem;
+    background:linear-gradient(to top,rgba(12,23,16,.85),transparent);
+    font-family:var(--serif);font-size:1.05rem;letter-spacing:.05em;
+  }
+  .ba figcaption small{display:block;font-family:var(--sans);color:var(--muted);font-size:.8rem;margin-top:.2rem}
+  @media(max-width:760px){.ba{grid-template-columns:1fr}}
+
+  /* ---------- packages ---------- */
+  .pkgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:3rem}
+  .pkg{
+    background:var(--bg2);border:1px solid var(--line);
+    padding:2.2rem 2rem;border-radius:4px;position:relative;
+    transition:border-color .35s,transform .35s;
+  }
+  .pkg:hover{border-color:rgba(216,196,147,.45);transform:translateY(-4px)}
+  .pkg.featured{border-color:var(--gold);background:linear-gradient(160deg,var(--panel),var(--bg2))}
+  .pkg .tag{position:absolute;top:1.2rem;inset-inline-end:1.2rem;font-size:.7rem;color:var(--gold);letter-spacing:.2em}
+  .pkg h3{font-family:var(--serif);font-weight:400;font-size:1.5rem}
+  .pkg .price{font-family:var(--serif);font-size:1.25rem;color:var(--accent);margin:.6rem 0 .2rem}
+  .pkg .size{color:var(--muted);font-size:.85rem;margin-bottom:1.4rem}
+  .pkg ul{list-style:none;display:grid;gap:.65rem;font-size:.92rem;color:var(--muted);margin-bottom:1.4rem}
+  .pkg li::before{content:"—  ";color:var(--gold)}
+  .pkg .note{font-size:.78rem;color:var(--muted);border-top:1px solid var(--line);padding-top:1rem;margin-bottom:1.4rem}
+  .pkg a{font-size:.88rem;color:var(--gold);border-bottom:1px solid rgba(216,196,147,.4);padding-bottom:.15rem}
+
+  /* ---------- process ---------- */
+  .steps{counter-reset:st;margin-top:3rem;border-top:1px solid var(--line)}
+  .step{
+    display:grid;grid-template-columns:4rem 1fr 2fr;gap:1.5rem;
+    padding:2rem 0;border-bottom:1px solid var(--line);align-items:baseline;
+  }
+  .step::before{
+    counter-increment:st;content:"0" counter(st);
+    font-family:var(--serif);font-size:1.6rem;color:var(--gold);
+  }
+  .step h3{font-family:var(--serif);font-weight:400;font-size:1.3rem}
+  .step p{color:var(--muted);font-size:.92rem}
+  @media(max-width:700px){.step{grid-template-columns:3rem 1fr}.step p{grid-column:2}}
+
+  /* ---------- final cta ---------- */
+  .final{
+    text-align:center;background:linear-gradient(160deg,var(--panel),var(--bg));
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  }
+  .final h2{font-size:clamp(2rem,4.5vw,3.4rem);margin-bottom:1rem}
+  .final p{color:var(--muted);max-width:32rem;margin:0 auto 2.2rem}
+
+  footer{
+    padding:2.5rem clamp(1.2rem,5vw,4rem);display:flex;flex-wrap:wrap;gap:1rem;
+    justify-content:space-between;color:var(--muted);font-size:.8rem;
+  }
+  footer a{color:var(--gold)}
+
+  /* reveal motion */
+  @media(prefers-reduced-motion:no-preference){
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s ease}
+    .reveal.in{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="index.html">
+    <img src="logo.svg" alt="">
+    <span><b>ATELIER VERT</b><small>האטלייה הירוק · נתניה</small></span>
+  </a>
+  <nav>
+    <a class="link" href="#solutions">פתרונות</a>
+    <a class="link" href="#packages">חבילות</a>
+    <a class="link" href="#process">איך עובדים</a>
+    <a class="cta" href="https://wa.me/972552949134">WhatsApp</a>
+  </nav>
+</header>
+
+<main>
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <p class="kicker">עיצוב והקמת מרפסות ירוקות · נתניה</p>
+      <h1>מרפסת ירוקה מוכנה <em>לשמש ולרוח</em> של נתניה</h1>
+      <p class="lead">עיצוב, צמחים, כדים, השקיה אוטומטית, התקנה ותחזוקה במקום אחד. מתחילים מתמונות ומציעים כיוון, חבילה וטווח תקציב שמתאימים למרפסת שלכם.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="https://wa.me/972552949134">לקבל הערכה ראשונית</a>
+        <a class="btn-ghost" href="#packages">חבילות ומחירים</a>
+      </div>
+      <p class="hero-note"><b>חבילת Start מ-6 900 ₪</b> · התקנה טיפוסית 1–3 ימים אחרי מוכנות חומרים</p>
+    </div>
+    <div class="hero-media reveal">
+      <img src="hero-after-same-balcony-opt.jpg" alt="מרפסת ירוקה בנתניה">
+      <div class="badge"><b>פתרון תחת קורת גג אחת</b>עיצוב, צמחים, השקיה והתקנה</div>
+    </div>
+  </div>
+
+  <!-- PROBLEM -> SOLUTION -->
+  <section id="solutions">
+    <div class="wrap">
+      <p class="sec-kicker reveal">בעיה → פתרון</p>
+      <h2 class="reveal">לא כל מרפסת צריכה אותו פתרון</h2>
+      <p class="sec-lead reveal">לפני בחירת צמחים בודקים איך תרצו להשתמש במרפסת, את התנאים בה ואת טווח התקציב.</p>
+      <div class="pair">
+        <div class="reveal"><h3>מרפסת ריקה</h3><p>הופכת לאזור שאפשר להשתמש בו כל יום.</p></div>
+        <div class="reveal"><h3>צמחים שנשרפים</h3><p>נבחרים לפי שמש, רוח ויכולת טיפול.</p></div>
+        <div class="reveal"><h3>בלגן של עציצים</h3><p>מוחלף בתכנון שכבות, כדים ומעברים.</p></div>
+        <div class="reveal"><h3>חשש מתחזוקה</h3><p>נענה בהשקיה, הדרכה ואפשרות שירות.</p></div>
+      </div>
+
+      <!-- BEFORE / AFTER -->
+      <div class="ba">
+        <figure class="reveal">
+          <img src="hero-before-opt.jpg" alt="לפני">
+          <figcaption>לפני<small>מרפסת ריקה, אותן תנאים</small></figcaption>
+        </figure>
+        <figure class="reveal">
+          <img src="hero-after-same-balcony-opt.jpg" alt="אחרי">
+          <figcaption>אחרי<small>אותה מרפסת, אותה זווית</small></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- PACKAGES -->
+  <section id="packages">
+    <div class="wrap">
+      <p class="sec-kicker reveal">חבילות</p>
+      <h2 class="reveal">תקציב ברור לפני שמשאירים פרטים</h2>
+      <p class="sec-lead reveal">שלוש רמות שירות עם טווחי מחיר ברורים כדי להבין מה מתאים לכם.</p>
+      <div class="pkgs">
+        <div class="pkg reveal">
+          <h3>Start</h3>
+          <p class="price">6 900–9 900 ₪</p>
+          <p class="size">כ-8–15 מ״ר · התחלה מסודרת ומהירה</p>
+          <ul>
+            <li>שיחת אפיון ותמונות</li>
+            <li>סט כדים סטנדרטי</li>
+            <li>צמחים עמידים</li>
+            <li>טפטוף בסיסי</li>
+            <li>התקנה מסודרת</li>
+          </ul>
+          <p class="note">אינו כולל עבודות בנייה, איטום, חשמל מורכב או חישובים הנדסיים.</p>
+          <a href="https://wa.me/972552949134">לבדוק אם Start מתאים</a>
+        </div>
+        <div class="pkg featured reveal">
+          <span class="tag">נבחרת</span>
+          <h3>Signature</h3>
+          <p class="price">12 900–19 900 ₪</p>
+          <p class="size">כ-15–30 מ״ר · החבילה המרכזית לשינוי מלא</p>
+          <ul>
+            <li>קונספט תכנוני</li>
+            <li>שילוב כדים וגדלים</li>
+            <li>צמחייה בשכבות</li>
+            <li>מערכת השקיה אוטומטית</li>
+            <li>הדרכת טיפול</li>
+          </ul>
+          <p class="note">אלמנטים מיוחדים, תאורה ופרגולות מתומחרים בנפרד לאחר בדיקה.</p>
+          <a href="https://wa.me/972552949134">לקבל קונספט והערכה</a>
+        </div>
+        <div class="pkg reveal">
+          <h3>Premium / Penthouse</h3>
+          <p class="price">25 000–60 000+ ₪</p>
+          <p class="size">מרפסות גדולות ונוף פתוח · פרויקט אישי עם צמחים בוגרים</p>
+          <ul>
+            <li>פגישת תכנון</li>
+            <li>תכנית פרויקט מלאה</li>
+            <li>צמחים בוגרים</li>
+            <li>אלמנטים מותאמים</li>
+            <li>ליווי תחזוקה</li>
+          </ul>
+          <p class="note">בדיקות עומס, קונסטרוקציה, איטום ותשתיות מבוצעות רק עם מומחה מתאים במידת הצורך.</p>
+          <a href="https://wa.me/972552949134">לקבוע פגישת תכנון</a>
+        </div>
+      </div>
+      <p style="margin-top:1.6rem;font-size:.78rem;color:var(--muted)">טווח המחיר הוא הערכה בלבד ולא הצעה מחייבת. הסכום הסופי תלוי בשטח, גישה, כדים, גודל הצמחים, מערכת ההשקיה ואלמנטים נוספים. הצעת מחיר מדויקת לאחר תמונות ובירור.</p>
+    </div>
+  </section>
+
+  <!-- CASE -->
+  <section id="case">
+    <div class="wrap">
+      <p class="sec-kicker reveal">קייס · אגמים</p>
+      <h2 class="reveal">מרפסת משפחתית עם פרטיות ושכבות ירק</h2>
+      <p class="sec-lead reveal">מרפסת בשימוש יומיומי שצריכה להישאר בטוחה לילדים וליצור הפרדה מהשכנים. כ-15–30 מ״ר · Signature · 12 900–19 900 ₪.</p>
+      <div class="ba">
+        <figure class="reveal">
+          <img src="project-agamin-before-opt.jpg" alt="לפני">
+          <figcaption>לפני<small>מרפסת בטון חשופה</small></figcaption>
+        </figure>
+        <figure class="reveal">
+          <img src="project-agamin-after-same-balcony-opt.jpg" alt="אחרי">
+          <figcaption>אחרי<small>שכבות ירק והפרדה מהשכנים</small></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="wrap">
+      <p class="sec-kicker reveal">תהליך</p>
+      <h2 class="reveal">5 שלבים מתמונה ועד טיפול</h2>
+      <div class="steps">
+        <div class="step reveal"><h3>תמונות ופרטים</h3><p>שולחים אזור, גודל משוער, תנאי שמש/רוח ו-2–5 תמונות. מתקבלת תמונת מצב בלי פגישה ארוכה.</p></div>
+        <div class="step reveal"><h3>בדיקה ראשונית</h3><p>בודקים התאמה לאזור השירות, גישה, גובה, ניקוז, תחזוקה צפויה וטווח תקציב.</p></div>
+        <div class="step reveal"><h3>קונספט וטווח</h3><p>מציעים כיוון עיצובי, חבילה מתאימה וטווח תקציב. זה עדיין לא מחיר סופי.</p></div>
+        <div class="step reveal"><h3>אספקה והתקנה</h3><p>לאחר אישור הפרויקט משולמת עלות החומרים. ההתקנה נמשכת בדרך כלל 1–3 ימים אחרי מוכנות החומרים.</p></div>
+        <div class="step reveal"><h3>הדרכה ותחזוקה</h3><p>הסבר טיפול, בדיקת השקיה והצעה לביקורי שירות או עדכונים עונתיים.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final">
+    <div class="wrap">
+      <h2 class="reveal">מתחילים מתמונות, לא מניחושים</h2>
+      <p class="reveal">שלחו פרטים בסיסיים, ואם התמונות עדיין לא מוכנות אפשר לפתוח WhatsApp עם הודעה מוכנה.</p>
+      <a class="btn-primary reveal" href="https://wa.me/972552949134">שלחו לנו תמונות של המרפסת</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>ATELIER VERT · האטלייה הירוק · נתניה</span>
+  <span><a href="tel:0552949134">055-2949134</a> · <a href="https://wa.me/972552949134">WhatsApp</a> · hello@atelier-vert.co.il</span>
+</footer>
+
+<script>
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
