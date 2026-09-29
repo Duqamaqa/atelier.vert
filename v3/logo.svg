@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="ATELIER VERT logo">
+  <rect width="96" height="96" rx="18" fill="#123126"/>
+  <path d="M48 76V29" fill="none" stroke="#fbfaf5" stroke-width="5" stroke-linecap="round"/>
+  <path d="M48 30c-17 0-26 10-26 25 17 0 26-10 26-25Z" fill="#dfe8dc"/>
+  <path d="M49 31c17 0 25 10 25 25-17 0-25-10-25-25Z" fill="#8fb49a"/>
+  <path d="M27 76h42" fill="none" stroke="#b06445" stroke-width="5" stroke-linecap="round"/>
+</svg>
