@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ATELIER VERT — the green atelier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500&family=Heebo:wght@100;200;300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070d09; --ink:#e9efe4; --muted:#8fa48f;
+  --gold:#d3bd8d; --sage:#c3d9ac;
+  --serif:"Frank Ruhl Libre","Cormorant Garamond",serif;
+  --lat:"Cormorant Garamond",serif;
+  --sans:"Heebo",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bg)}
+body{color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--gold);color:#070d09}
+
+/* ---------- preloader ---------- */
+#loader{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;transition:opacity 1s,visibility 1s}
+#loader.done{opacity:0;visibility:hidden}
+#loader .word{font-family:var(--lat);font-size:clamp(2rem,6vw,4.5rem);letter-spacing:.3em;font-weight:300;color:var(--ink);display:flex;overflow:hidden}
+#loader .word span{display:inline-block;transform:translateY(110%);opacity:0}
+#loader .bar{width:180px;height:1px;background:rgba(255,255,255,.12);position:relative;overflow:hidden}
+#loader .bar i{position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:right}
+#loader .pct{font-size:.7rem;letter-spacing:.4em;color:var(--muted)}
+
+/* ---------- custom cursor ---------- */
+.cur{position:fixed;top:0;left:0;z-index:300;pointer-events:none;border-radius:50%;translate:-50% -50%;mix-blend-mode:difference}
+.cur-dot{width:6px;height:6px;background:#fff}
+.cur-ring{width:36px;height:36px;border:1px solid rgba(255,255,255,.7);transition:width .3s,height .3s,background .3s}
+.cur-ring.hover{width:70px;height:70px;background:rgba(255,255,255,.08)}
+@media(pointer:coarse){.cur{display:none}}
+
+/* ---------- fixed layers ---------- */
+#gl{position:fixed;inset:0;z-index:0}
+.grain{position:fixed;inset:-50%;z-index:90;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 8s steps(10) infinite}
+@keyframes grain{0%,100%{transform:translate(0,0)}20%{transform:translate(-4%,6%)}40%{transform:translate(5%,-3%)}60%{transform:translate(-6%,-5%)}80%{transform:translate(3%,6%)}}
+.vig{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(130% 100% at 50% 0%,transparent 50%,rgba(4,8,5,.6))}
+header,main,footer{position:relative;z-index:2}
+
+/* ---------- header ---------- */
+header{position:fixed;top:0;inset-inline:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+  padding:1.2rem clamp(1.4rem,4vw,3.4rem);mix-blend-mode:difference}
+.brand{display:flex;align-items:center;gap:.8rem}
+.brand b{font-family:var(--lat);font-weight:400;letter-spacing:.34em;font-size:.92rem;color:#fff}
+.brand small{display:block;color:#bbb;font-size:.68rem;letter-spacing:.14em}
+nav{display:flex;gap:2rem;align-items:center;font-size:.85rem}
+nav .link{color:#ccc;position:relative;padding-bottom:2px}
+nav .link::after{content:"";position:absolute;bottom:0;left:0;width:0;height:1px;background:#fff;transition:width .4s}
+nav .link:hover::after{width:100%}
+.wa{border:1px solid #fff;padding:.55rem 1.5rem;border-radius:999px;font-size:.82rem;color:#fff;transition:background .35s,color .35s}
+.wa:hover{background:#fff;color:#000}
+@media(max-width:820px){nav .link{display:none}}
+
+/* ---------- hero ---------- */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+  padding:8rem 1.4rem 6rem;position:relative}
+.hero .over{font-family:var(--lat);font-size:.8rem;letter-spacing:.5em;color:var(--gold);text-transform:uppercase;margin-bottom:2.5rem;opacity:0}
+h1{font-family:var(--serif);font-weight:300;font-size:clamp(3.2rem,9vw,8.5rem);line-height:1.05;letter-spacing:-.01em}
+h1 .l{display:block;overflow:hidden;padding-bottom:.08em}
+h1 .l>span{display:block;transform:translateY(112%)}
+h1 .thin{color:var(--sage);font-style:italic;font-family:var(--lat)}
+.hero .sub{max-width:34rem;color:var(--muted);margin:2.8rem auto 3rem;font-size:1.02rem;opacity:0}
+.hero .go{opacity:0;display:inline-flex;align-items:center;gap:.9rem;font-size:.9rem;color:var(--ink);
+  border:1px solid rgba(255,255,255,.25);padding:1rem 2.4rem;border-radius:999px;transition:border-color .4s,background .4s}
+.hero .go:hover{border-color:var(--gold);background:rgba(211,189,141,.08)}
+.hero .go i{font-style:normal;width:7px;height:7px;border-radius:50%;background:var(--gold);display:inline-block;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.3}}
+.scroll-hint{position:absolute;bottom:2.2rem;left:50%;translate:-50% 0;color:var(--muted);font-size:.68rem;letter-spacing:.4em;text-transform:uppercase}
+.scroll-hint::after{content:"";display:block;width:1px;height:2.6rem;margin:1rem auto 0;background:linear-gradient(var(--gold),transparent)}
+@media(prefers-reduced-motion:reduce){.scroll-hint::after{animation:none}}
+
+/* ---------- statement ---------- */
+.statement{padding:clamp(6rem,16vh,12rem) 1.4rem;text-align:center}
+.statement p{font-family:var(--serif);font-weight:300;font-size:clamp(1.7rem,4.4vw,3.4rem);line-height:1.45;max-width:26ch;margin:0 auto}
+.statement .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.1em;margin-bottom:-.1em}
+.statement .w>span{display:inline-block;transform:translateY(110%)}
+.statement em{font-family:var(--lat);font-style:italic;color:var(--gold)}
+.statement .sig{margin-top:3rem;color:var(--muted);font-size:.8rem;letter-spacing:.3em;text-transform:uppercase}
+
+/* ---------- gallery (pinned horizontal) ---------- */
+.gal{position:relative}
+.gal-head{padding:6.5rem clamp(1.4rem,6vw,6rem) 3rem;max-width:1400px;margin:0 auto}
+.gal-head h2{font-family:var(--serif);font-weight:300;font-size:clamp(2rem,4.5vw,3.6rem)}
+.gal-head p{color:var(--muted);margin-top:.8rem;max-width:36rem}
+.gal-track{display:flex;gap:clamp(1.5rem,4vw,4rem);padding:0 clamp(1.4rem,6vw,6rem);align-items:center;height:100svh;will-change:transform}
+@media(max-width:759px){
+  .gal-track{flex-direction:column;height:auto;padding-block:2rem}
+  .card{width:100%;height:auto}
+  .card.tall,.card.wide{aspect-ratio:4/5}
+  .gal-hint{display:none}
+}
+.card{position:relative;flex:none;height:66svh;border-radius:3px;overflow:hidden}
+.card img{height:100%;width:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.card:hover img{transform:scale(1.06)}
+.card::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(4,8,5,.55),transparent 45%)}
+.card figcaption{position:absolute;bottom:1.6rem;inset-inline-start:1.6rem;z-index:2}
+.card figcaption b{font-family:var(--serif);font-weight:400;font-size:1.5rem;display:block}
+.card figcaption span{color:var(--muted);font-size:.82rem}
+.card.tall{aspect-ratio:3/4.4}
+.card.wide{aspect-ratio:16/10;height:52svh;align-self:center}
+.gal-hint{position:absolute;bottom:2rem;inset-inline-start:50%;translate:50% 0;color:var(--muted);font-size:.68rem;letter-spacing:.4em;text-transform:uppercase;white-space:nowrap}
+
+/* ---------- services ---------- */
+.svc{padding:clamp(6rem,14vh,11rem) clamp(1.4rem,6vw,6rem);max-width:1400px;margin:0 auto;position:relative}
+.svc::before{content:"";position:absolute;inset-inline-start:-10rem;top:20%;width:30rem;height:30rem;border-radius:50%;
+  background:radial-gradient(circle,rgba(60,100,70,.10),transparent 70%);pointer-events:none}
+.svc::after{content:"";position:absolute;inset-inline-end:-12rem;bottom:10%;width:34rem;height:34rem;border-radius:50%;
+  background:radial-gradient(circle,rgba(211,189,141,.06),transparent 70%);pointer-events:none}
+.svc-row{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(1.5rem,4vw,4rem);align-items:baseline;
+  padding:2.6rem 0;border-bottom:1px solid rgba(233,239,228,.1);transition:padding .4s;position:relative}
+.svc-row:first-child{border-top:1px solid rgba(233,239,228,.1)}
+.svc-row .idx{font-family:var(--lat);color:var(--muted);font-size:.9rem}
+.svc-row h3{font-family:var(--serif);font-weight:300;font-size:clamp(1.8rem,4vw,3.2rem);transition:color .4s,transform .5s}
+.svc-row p{color:var(--muted);max-width:26rem;font-size:.92rem;text-align:start}
+.svc-row:hover h3{color:var(--gold);transform:translateX(-10px)}
+.svc-row .arr{font-family:var(--lat);color:var(--muted);font-size:1.4rem;transition:color .4s,translate .4s}
+.svc-row:hover .arr{color:var(--gold);translate:-8px 0}
+@media(max-width:760px){.svc-row{grid-template-columns:1fr}.svc-row p{text-align:start}}
+
+/* ---------- full-bleed quote ---------- */
+.bleed{position:relative;height:110svh;overflow:hidden}
+.bleed img{position:absolute;inset:0;width:100%;height:120%;object-fit:cover;will-change:transform}
+.bleed .cap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.4rem;text-align:center;
+  background:linear-gradient(rgba(4,8,5,.35),rgba(4,8,5,.55))}
+.bleed .cap h3{font-family:var(--lat);font-weight:300;font-size:clamp(2.2rem,6vw,5rem);font-style:italic;max-width:16ch}
+.bleed .cap span{color:var(--gold);font-size:.75rem;letter-spacing:.45em;text-transform:uppercase}
+
+/* ---------- packages ---------- */
+.pks{padding:clamp(6rem,14vh,11rem) clamp(1.4rem,6vw,6rem);max-width:1400px;margin:0 auto;text-align:center;position:relative}
+.pks::before{content:"";position:absolute;top:-6rem;inset-inline-start:50%;translate:50% 0;width:50rem;height:24rem;
+  background:radial-gradient(ellipse,rgba(60,100,70,.09),transparent 70%);pointer-events:none}
+.pks h2{font-family:var(--serif);font-weight:300;font-size:clamp(2.2rem,5vw,4rem);margin-bottom:1rem}
+.pks>.p{color:var(--muted);max-width:30rem;margin:0 auto 4rem}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.6rem;text-align:start}
+.pk{border:1px solid rgba(233,239,228,.12);border-radius:3px;padding:3rem 2.4rem;background:rgba(10,18,12,.5);backdrop-filter:blur(10px);
+  position:relative;overflow:hidden;transition:border-color .5s,transform .5s cubic-bezier(.2,.8,.2,1)}
+.pk::before{content:"";position:absolute;inset:0;background:radial-gradient(90% 60% at 50% -10%,rgba(211,189,141,.14),transparent);
+  opacity:0;transition:opacity .5s}
+.pk:hover{border-color:rgba(211,189,141,.55);transform:translateY(-8px)}
+.pk:hover::before{opacity:1}
+.pk.feat{border-color:rgba(211,189,141,.5)}
+.pk .tag{position:absolute;top:1.6rem;inset-inline-end:1.6rem;font-size:.62rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase}
+.pk h3{font-family:var(--lat);font-weight:400;font-size:1.9rem;letter-spacing:.04em}
+.pk .pr{font-family:var(--serif);font-size:1.6rem;color:var(--sage);margin:.9rem 0 .2rem}
+.pk .sz{color:var(--muted);font-size:.85rem;margin-bottom:2rem}
+.pk ul{list-style:none;display:grid;gap:.8rem;font-size:.92rem;color:var(--muted);margin-bottom:2.2rem}
+.pk li{display:flex;gap:.8rem;align-items:baseline}
+.pk li::before{content:"";width:1rem;height:1px;background:var(--gold);flex:none;translate:0 -.35em}
+.pk .go2{display:inline-flex;gap:.7rem;align-items:center;color:var(--gold);font-size:.88rem}
+.pk .go2::after{content:"←";transition:translate .3s}
+.pk .go2:hover::after{translate:-5px 0}
+.pk .disc{font-size:.72rem;color:var(--muted);opacity:.7;margin-top:1.6rem;line-height:1.5}
+
+/* ---------- process ---------- */
+.proc{padding:clamp(6rem,14vh,11rem) clamp(1.4rem,6vw,6rem);max-width:1100px;margin:0 auto}
+.proc h2{font-family:var(--serif);font-weight:300;font-size:clamp(2rem,4.5vw,3.4rem);margin-bottom:4rem}
+.step{display:grid;grid-template-columns:6rem 1fr;gap:2rem;padding:2.4rem 0;border-bottom:1px solid rgba(233,239,228,.1);align-items:start}
+.step .n{font-family:var(--lat);font-size:1rem;color:var(--gold);letter-spacing:.2em}
+.step h3{font-family:var(--serif);font-weight:400;font-size:1.6rem;margin-bottom:.4rem}
+.step p{color:var(--muted);max-width:38rem}
+@media(max-width:700px){.step{grid-template-columns:1fr}.step .n{margin-bottom:.6rem}}
+
+/* ---------- final ---------- */
+.finale{min-height:90svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6rem 1.4rem;position:relative}
+.finale h2{font-family:var(--serif);font-weight:300;font-size:clamp(3rem,8vw,7rem);line-height:1.1}
+.finale h2 .thin{font-family:var(--lat);font-style:italic;color:var(--gold)}
+.finale p{color:var(--muted);max-width:28rem;margin:2rem 0 3rem}
+.finale .go{display:inline-flex;align-items:center;gap:.9rem;font-size:.95rem;color:#070d09;background:var(--gold);
+  padding:1.1rem 2.8rem;border-radius:999px;transition:transform .35s,box-shadow .35s}
+.finale .go:hover{transform:translateY(-3px);box-shadow:0 18px 50px rgba(211,189,141,.25)}
+footer{padding:2.5rem clamp(1.4rem,6vw,6rem);display:flex;flex-wrap:wrap;gap:1.2rem;justify-content:space-between;
+  color:var(--muted);font-size:.76rem;border-top:1px solid rgba(233,239,228,.08)}
+footer a{color:var(--gold)}
+
+/* scroll reveals */
+.rv{opacity:0;transform:translateY(50px)}
+@media(prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none}
+  .grain{animation:none}
+  *{transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<div id="loader" aria-hidden="true">
+  <div class="word"><span>A</span><span>T</span><span>E</span><span>L</span><span>I</span><span>E</span><span>R</span><span style="width:.5em"></span><span>V</span><span>E</span><span>R</span><span>T</span></div>
+  <div class="bar"><i id="lbar"></i></div>
+  <div class="pct" id="lpct">00</div>
+</div>
+
+<div class="cur cur-dot" id="cdot"></div>
+<div class="cur cur-ring" id="cring"></div>
+
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="vig" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header>
+  <a class="brand" href="#">
+    <img src="logo.svg" alt="" style="width:34px;height:34px">
+    <span><b>ATELIER VERT</b><small>האטלייה הירוק · נתניה</small></span>
+  </a>
+  <nav>
+    <a class="link" href="#work">פרויקטים</a>
+    <a class="link" href="#services">שירותים</a>
+    <a class="link" href="#packages">חבילות</a>
+    <a class="wa" href="https://wa.me/972552949134">WhatsApp</a>
+  </nav>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <p class="over" id="h-over">Balcony gardens · Netanya</p>
+    <h1>
+      <span class="l"><span>הטבע,</span></span>
+      <span class="l"><span>מעוצב <span class="thin">à la carte</span></span></span>
+    </h1>
+    <p class="sub" id="h-sub">סטודיו בוטיק למרפסות ירוקות בנתניה. עיצוב, צמחים, השקיה ותחזוקה — חוויה ירוקה שנשארת איתכם.</p>
+    <a class="go" id="h-go" href="https://wa.me/972552949134"><i></i>לקבל הערכה ראשונית</a>
+    <div class="scroll-hint">scroll</div>
+  </section>
+
+  <!-- STATEMENT -->
+  <section class="statement">
+    <p id="stmt">אנחנו לא מסדרים <em>עציצים</em> — אנחנו בונים <em>מקום</em> שמחכה לכם בכל ערב, עם ריח של ים ושקט של עלים.</p>
+    <p class="sig rv">Atelier Vert — green balconies, Netanya</p>
+  </section>
+
+  <!-- HORIZONTAL GALLERY -->
+  <section class="gal" id="work">
+    <div class="gal-head">
+      <h2 class="rv">הפרויקטים שלנו</h2>
+      <p class="rv">כל מרפסת היא יצירה אחרת — לפי שמש, רוח, גובה ואורח החיים של בעליה.</p>
+    </div>
+    <div class="gal-track" id="gtrack">
+      <figure class="card tall">
+        <img src="penthouse-gold.jpg" alt="">
+        <figcaption><b>Penthouse · אגמים</b><span>צמחים בוגרים · נוף פתוח</span></figcaption>
+      </figure>
+      <figure class="card wide">
+        <img src="olive-dusk.jpg" alt="">
+        <figcaption><b>חצר עירונית · עיר ימים</b><span>זית בוגר · תאורה חמה</span></figcaption>
+      </figure>
+      <figure class="card tall">
+        <img src="night-sea.jpg" alt="">
+        <figcaption><b>קו החוף · שעות ערב</b><span>השקיה אוטומטית · תחזוקה מלאה</span></figcaption>
+      </figure>
+      <figure class="card wide">
+        <img src="leaves-macro.jpg" alt="">
+        <figcaption><b>פרטים</b><span>בחירת צמחים לפי אור ורוח</span></figcaption>
+      </figure>
+      <figure class="card tall">
+        <img src="fern-glow.jpg" alt="">
+        <figcaption><b>שכבות ירק</b><span>פרטיות · אורח חיים משפחתי</span></figcaption>
+      </figure>
+    </div>
+    <div class="gal-hint">← גללו</div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="svc" id="services">
+    <h2 class="rv" style="font-family:var(--serif);font-weight:300;font-size:clamp(2rem,4.5vw,3.4rem);margin-bottom:3.5rem">מה אנחנו עושים</h2>
+    <a class="svc-row" href="https://wa.me/972552949134"><span class="idx">01</span><h3>תכנון ועיצוב</h3><p>קונספט אישי לפי תנאי המרפסת: שמש, רוח ים, גובה וניקוז.</p><span class="arr">←</span></a>
+    <a class="svc-row" href="https://wa.me/972552949134"><span class="idx">02</span><h3>צמחים וכדים</h3><p>בחירה מדויקת של מינים וכדים שמחזיקים שנים בתנאי החוף.</p><span class="arr">←</span></a>
+    <a class="svc-row" href="https://wa.me/972552949134"><span class="idx">03</span><h3>השקיה אוטומטית</h3><p>מערכת טפטוף שקטה וחסכונית — המרפסת מטופלת גם כשאתם בחופשה.</p><span class="arr">←</span></a>
+    <a class="svc-row" href="https://wa.me/972552949134"><span class="idx">04</span><h3>התקנה ותחזוקה</h3><p>התקנה מסודרת תוך 1–3 ימים וליווי עונתי אחרי ההתקנה.</p><span class="arr">←</span></a>
+  </section>
+
+  <!-- FULL BLEED QUOTE -->
+  <section class="bleed">
+    <img id="bleedImg" src="night-sea.jpg" alt="">
+    <div class="cap">
+      <h3 id="bleedCap">«מרפסת אחת יכולה לשנות איך הבית נושם»</h3>
+      <span>Atelier Vert</span>
+    </div>
+  </section>
+
+  <!-- PACKAGES -->
+  <section class="pks" id="packages">
+    <h2 class="rv">חבילות ברורות</h2>
+    <p class="p rv">תקציב גלוי לפני שמשאירים פרטים. טווח המחיר הוא הערכה בלבד ולא הצעה מחייבת.</p>
+    <div class="pgrid">
+      <div class="pk rv">
+        <h3>Start</h3><p class="pr">₪6,900–9,900</p><p class="sz">כ-8–15 מ״ר</p>
+        <ul><li>שיחת אפיון ותמונות</li><li>סט כדים סטנדרטי</li><li>צמחים עמידים</li><li>טפטוף בסיסי</li><li>התקנה מסודרת</li></ul>
+        <p class="disc">אינו כולל עבודות בנייה, איטום או חשמל מורכב.</p>
+        <a class="go2" href="https://wa.me/972552949134">לבדוק אם מתאים</a>
+      </div>
+      <div class="pk feat rv">
+        <span class="tag">נבחרת</span>
+        <h3>Signature</h3><p class="pr">₪12,900–19,900</p><p class="sz">כ-15–30 מ״ר</p>
+        <ul><li>קונספט תכנוני מלא</li><li>צמחייה בשכבות</li><li>מערכת השקיה אוטומטית</li><li>הדרכת טיפול</li><li>אלמנטים מיוחדים בנפרד</li></ul>
+        <a class="go2" href="https://wa.me/972552949134">לקבל קונספט והערכה</a>
+      </div>
+      <div class="pk rv">
+        <h3>Penthouse</h3><p class="pr">₪25,000–60,000+</p><p class="sz">מרפסות גדולות · נוף פתוח</p>
+        <ul><li>פגישת תכנון אישית</li><li>תכנית פרויקט מלאה</li><li>צמחים בוגרים</li><li>אלמנטים מותאמים</li><li>ליווי תחזוקה</li></ul>
+        <p class="disc">בדיקות עומס ואיטום עם מומחה מתאים במידת הצורך.</p>
+        <a class="go2" href="https://wa.me/972552949134">לקבוע פגישת תכנון</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="proc">
+    <h2 class="rv">חמישה שלבים</h2>
+    <div class="step rv"><span class="n">01</span><div><h3>תמונות ופרטים</h3><p>שולחים אזור, גודל משוער ו-2–5 תמונות. בלי פגישה ארוכה.</p></div></div>
+    <div class="step rv"><span class="n">02</span><div><h3>בדיקה ראשונית</h3><p>גישה, גובה, ניקוז, תחזוקה צפויה וטווח תקציב.</p></div></div>
+    <div class="step rv"><span class="n">03</span><div><h3>קונספט וטווח</h3><p>כיוון עיצובי, חבילה מתאימה וטווח תקציב — עדיין לא מחיר סופי.</p></div></div>
+    <div class="step rv"><span class="n">04</span><div><h3>אספקה והתקנה</h3><p>אחרי אישור משולמת עלות החומרים. התקנה 1–3 ימים.</p></div></div>
+    <div class="step rv"><span class="n">05</span><div><h3>הדרכה ותחזוקה</h3><p>הסבר טיפול, בדיקת השקיה וביקורי עונה.</p></div></div>
+  </section>
+
+  <!-- FINALE -->
+  <section class="finale">
+    <h2>יש לכם מרפסת.<br><span class="thin">יש לנו את הירוק.</span></h2>
+    <p>שלחו תמונות של המרפסת ב-WhatsApp — נחזור עם כיוון עיצובי וטווח תקציב.</p>
+    <a class="go" href="https://wa.me/972552949134">שלחו תמונות · WhatsApp</a>
+  </section>
+</main>
+
+<footer>
+  <span>ATELIER VERT · האטלייה הירוק · Netanya</span>
+  <span><a href="tel:0552949134">055-2949134</a> · <a href="https://wa.me/972552949134">WhatsApp</a> · hello@atelier-vert.co.il</span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+gsap.registerPlugin(ScrollTrigger);
+
+/* ---------- lenis ---------- */
+let lenis=null;
+if(!reduced){
+  lenis=new Lenis({lerp:.085});
+  lenis.on('scroll',ScrollTrigger.update);
+  const raf=t=>{lenis.raf(t);requestAnimationFrame(raf)};requestAnimationFrame(raf);
+}
+
+/* ---------- loader ---------- */
+(function(){
+  const letters=document.querySelectorAll('#loader .word span');
+  gsap.to(letters,{y:0,opacity:1,duration:.9,stagger:.05,ease:'power3.out'});
+  const st={v:0};
+  gsap.to(st,{v:100,duration:1.8,ease:'power2.inOut',
+    onUpdate(){document.getElementById('lbar').style.transform=`scaleX(${st.v/100})`;
+      document.getElementById('lpct').textContent=String(Math.round(st.v)).padStart(2,'0');},
+    onComplete(){
+      gsap.to('#loader',{opacity:0,duration:.9,delay:.25,onComplete(){document.getElementById('loader').classList.add('done');}});
+      heroIn();
+    }});
+})();
+
+function heroIn(){
+  gsap.to('h1 .l>span',{y:0,duration:1.4,stagger:.16,ease:'power4.out',delay:.2});
+  gsap.to('#h-over,#h-sub,#h-go',{opacity:1,y:0,duration:1.2,stagger:.15,delay:.9});
+  gsap.from('header',{y:-30,opacity:0,duration:1,delay:.6});
+}
+
+/* ---------- statement word-by-word ---------- */
+(function(){
+  const el=document.getElementById('stmt');
+  const parts=el.innerHTML.split(/(<em>.*?<\/em>)/g).filter(Boolean);
+  el.innerHTML=parts.map(p=>{
+    const em=p.startsWith('<em>');
+    const txt=em?p.replace(/<\/?em>/g,''):p;
+    return txt.trim().split(/\s+/).map(w=>`<span class="w${em?' em':''}"><span style="color:${em?'var(--gold)':'inherit'};font-family:${em?'var(--lat)':'inherit'};font-style:${em?'italic':'normal'}">${w}</span></span>`).join(' ');
+  }).join(' ');
+  gsap.to('#stmt .w>span',{y:0,duration:.8,stagger:.035,ease:'power3.out',
+    scrollTrigger:{trigger:'.statement',start:'top 72%'}});
+})();
+
+/* ---------- WebGL floating particles (dust/leaves) ---------- */
+(function(){
+  const c=document.getElementById('gl');
+  const gl=c.getContext('webgl',{alpha:true,antialias:false});
+  if(!gl||reduced){c.style.background='radial-gradient(70% 55% at 50% 30%,#12241a,#070d09)';return;}
+  const N=140;
+  const pos=new Float32Array(N*3),seed=new Float32Array(N);
+  for(let i=0;i<N;i++){pos[i*3]=Math.random()*2-1;pos[i*3+1]=Math.random()*2-1;pos[i*3+2]=Math.random();seed[i]=Math.random()*100;}
+  const vs=`attribute vec3 a;attribute float s;uniform float T;uniform vec2 R;uniform vec2 M;varying float vA;
+  void main(){
+    vec3 p=a;
+    p.x+=sin(T*.00007+s)*0.08+ (M.x-.5)*.06;
+    p.y+=fract(p.z+T*.00003)-.5;
+    p.y+= (M.y-.5)*.04;
+    float d=length(p.xy);
+    gl_Position=vec4(p.xy,0.,1.);
+    gl_PointSize=(1.2+2.2*fract(s*7.13))*(300.0/length(vec2(R.x,R.y)))*2.0;
+    vA=smoothstep(1.2,.2,d)*.5;
+  }`;
+  const fs=`precision mediump float;varying float vA;void main(){
+    vec2 u=gl_PointCoord-.5;float d=length(u);
+    float a=smoothstep(.5,.05,d)*vA;
+    gl_FragColor=vec4(.83,.74,.55,a*.5);
+  }`;
+  function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
+  const pr=gl.createProgram();
+  gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));
+  gl.linkProgram(pr);gl.useProgram(pr);
+  const b1=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b1);gl.bufferData(gl.ARRAY_BUFFER,pos,gl.STATIC_DRAW);
+  const aP=gl.getAttribLocation(pr,'a');gl.enableVertexAttribArray(aP);gl.vertexAttribPointer(aP,3,gl.FLOAT,false,12,0);
+  const b2=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b2);gl.bufferData(gl.ARRAY_BUFFER,seed,gl.STATIC_DRAW);
+  const aS=gl.getAttribLocation(pr,'s');gl.enableVertexAttribArray(aS);gl.vertexAttribPointer(aS,1,gl.FLOAT,false,4,0);
+  const uT=gl.getUniformLocation(pr,'T'),uR=gl.getUniformLocation(pr,'R'),uM=gl.getUniformLocation(pr,'M');
+  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+  let mx=.5,my=.5,tx=.5,ty=.5;
+  function size(){const d=Math.min(devicePixelRatio,1.5);c.width=innerWidth*d/2;c.height=innerHeight*d/2;gl.viewport(0,0,c.width,c.height);}
+  size();addEventListener('resize',size);
+  addEventListener('pointermove',e=>{tx=e.clientX/innerWidth;ty=e.clientY/innerHeight});
+  requestAnimationFrame(function draw(t){
+    mx+=(tx-mx)*.04;my+=(ty-my)*.04;
+    gl.uniform1f(uT,t);gl.uniform2f(uR,c.width,c.height);gl.uniform2f(uM,mx,my);
+    gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.POINTS,0,N);
+    requestAnimationFrame(draw);
+  });
+})();
+
+/* ---------- custom cursor ---------- */
+(function(){
+  if(matchMedia('(pointer:coarse)').matches)return;
+  const d=document.getElementById('cdot'),r=document.getElementById('cring');
+  let x=0,y=0,rx=0,ry=0;
+  addEventListener('pointermove',e=>{x=e.clientX;y=e.clientY;d.style.transform=`translate(${x}px,${y}px)`});
+  (function loop(){rx+=(x-rx)*.14;ry+=(y-ry)*.14;r.style.transform=`translate(${rx}px,${ry}px)`;requestAnimationFrame(loop)})();
+  document.querySelectorAll('a,.card,.svc-row,.pk').forEach(el=>{
+    el.addEventListener('pointerenter',()=>r.classList.add('hover'));
+    el.addEventListener('pointerleave',()=>r.classList.remove('hover'));
+  });
+})();
+
+/* ---------- scroll animations ---------- */
+/* generic reveals */
+document.querySelectorAll('.rv').forEach(el=>{
+  gsap.to(el,{opacity:1,y:0,duration:1.1,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 86%',once:true}});
+});
+
+/* pinned horizontal gallery (RTL) — desktop only; mobile stacks vertically */
+(function(){
+  const track=document.getElementById('gtrack');
+  if(reduced)return;
+  const mm=matchMedia('(min-width:760px)');
+  ScrollTrigger.matchMedia({
+    '(min-width:760px)': function(){
+      const dist=()=>Math.max(0,track.scrollWidth-innerWidth);
+      gsap.to(track,{x:()=>dist(),ease:'none',
+        scrollTrigger:{trigger:'.gal',start:'top top',end:()=>'+='+(dist()+innerHeight*.6),
+          pin:true,scrub:.5,invalidateOnRefresh:true,anticipatePin:1}});
+    }
+  });
+})();
+
+/* full-bleed parallax + caption scale */
+(function(){
+  const img=document.getElementById('bleedImg');
+  gsap.fromTo(img,{y:'-12%'},{y:'6%',ease:'none',
+    scrollTrigger:{trigger:'.bleed',start:'top bottom',end:'bottom top',scrub:true}});
+  gsap.fromTo('#bleedCap',{scale:.9,opacity:.6},{scale:1,opacity:1,
+    scrollTrigger:{trigger:'.bleed',start:'top 60%',end:'center center',scrub:true}});
+})();
+
+/* hero exit parallax */
+if(!reduced){
+  gsap.to('.hero h1, .hero .sub, .hero .over, .hero .go',{yPercent:-14,opacity:0,stagger:.02,ease:'none',
+    scrollTrigger:{trigger:'.hero',start:'top top',end:'60% top',scrub:true}});
+}
+
+/* anchors */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();lenis?lenis.scrollTo(t,{duration:1.6}):t.scrollIntoView({behavior:'smooth'});}
+  });
+});
+</script>
+</body>
+</html>
